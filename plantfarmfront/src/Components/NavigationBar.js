@@ -7,6 +7,8 @@ import { Link as LinkRouter} from 'react-router-dom';
 import PropTypes from 'prop-types';
 import Box from '@mui/material/Box';
 import CssBaseline from '@mui/material/CssBaseline';
+import Container from '@mui/material/Container';
+
 
 const sections = [
   { title: 'Plants', url: 'plants' },
@@ -31,6 +33,14 @@ function NavigationBar() {
       <Button color = 'inherit' sx={{ alignItems: 'flex-end' , backgroundColor: "#A9C47F"}} variant="outlined" size="medium" component={LinkRouter} to={'/login'}> Login </Button>
       </Toolbar>
       </AppBar>
+      <AppBar
+      />
+      <Container sx = {{left: -30, position:"absolute"}} maxWidth="xs">
+      <AppBar variant="dense"  position="sticky"> <Toolbar >  
+        </Toolbar>
+        </AppBar>
+      </Container>
+ 
     </React.Fragment>
   );
 }

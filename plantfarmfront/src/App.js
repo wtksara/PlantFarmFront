@@ -2,11 +2,11 @@ import Container from '@mui/material/Container';
 import './App.css';
 import {BrowserRouter as Router, Switch, Route} from 'react-router-dom';
 
-import PlantsPage from './Components/PlantsPage';
-import ManagmentPage from './Components/ManagmentPage';
-import HistoryPage from './Components/HistoryPage';
-import LoginPage from './Components/LoginPage';
-import MainPage from './Components/MainPage';
+import PlantsPage from './Components/Pages/PlantsPage';
+import ManagmentPage from './Components/Pages/ManagmentPage';
+import HistoryPage from './Components/Pages/HistoryPage';
+import LoginPage from './Components/Pages/LoginPage';
+import MainPage from './Components/Pages/MainPage';
 import NavigationBar from './Components/NavigationBar';
 import Box from '@mui/material/Box';
 

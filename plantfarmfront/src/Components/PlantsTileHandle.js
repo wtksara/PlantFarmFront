@@ -11,23 +11,12 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
-
-
-const style = {
-    position: 'absolute',
-    top: '50%',
-    left: '50%',
-    transform: 'translate(-50%, -50%)',
-    width: 400,
-    bgcolor: 'background.paper',
-    border: '2px solid #000',
-    boxShadow: 24,
-    p: 4,
-  };
-
+import PlantForm from './PlantForm';
+import DialogPage from './DialogPage';
   
-const EditPlantPage = (props) =>{
+const PlantsTileHandle = (props) =>{
    
+    
     const [open, setOpen] = React.useState(false);
 
     const handleClickOpen = () => {
@@ -38,8 +27,11 @@ const EditPlantPage = (props) =>{
       setOpen(false);
     };
 
+    const [openForm, setOpenForm] = useState(false)
+
     return (
         <React.Fragment>
+        <Button variant="outlined" onClick = {() => setOpenForm(true)} variant="contained" color = 'inherit' sx={{ backgroundColor: "#adc178"}} fullWidth  size="medium">Edit</Button>
         <Button variant="outlined" onClick={handleClickOpen} variant="contained" color = 'inherit' sx={{ backgroundColor: "#F4B752"}} fullWidth  size="medium">Delete</Button>
         <Dialog open={open} onClose={handleClose} aria-labelledby="alert-dialog-title" aria-describedby="alert-dialog-description">
         <DialogTitle id="alert-dialog-title"> {"Are you sure you want to delete this plant ?"} </DialogTitle>
@@ -52,8 +44,11 @@ const EditPlantPage = (props) =>{
           <Button onClick={handleClose} autoFocus variant="contained" color ='inherit' sx={{ backgroundColor: "#F4B752"}}  size="medium"> Delete </Button>
         </DialogActions>
       </Dialog>
+      <DialogPage title = "Edit plant" openForm = {openForm} setOpenForm = {setOpenForm}>
+              <PlantForm/>
+      </DialogPage>
       </React.Fragment>
     )
 }
 
-export default EditPlantPage;
+export default PlantsTileHandle;

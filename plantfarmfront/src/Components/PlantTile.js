@@ -12,7 +12,7 @@ import Modal from '@mui/material/Modal';
 import { useState } from "react";
 import Image from 'material-ui-image';
 
-import DeletePlantWindow from './DeletePlantWindow';
+import PlantsTileHandle from './PlantsTileHandle';
 import PlantForm from './PlantForm';
 
     const PlantTile = (props) =>{
@@ -23,7 +23,7 @@ import PlantForm from './PlantForm';
     
 
     return (
-            <Container maxWidth="md" component="main">
+            <Container maxWidth="md" component="main" >
             <Grid container spacing={5} alignItems="flex-end">
 
               {tiers.map((tier) => (
@@ -37,10 +37,9 @@ import PlantForm from './PlantForm';
                       <Typography component="li" variant="subtitle1" align="center" > Humidity: {tier.humidity} %</Typography>
                       <Typography component="li" variant="subtitle1" align="center" > Temperature: {tier.temperature}°C</Typography>
                       <Typography component="li" variant="subtitle1" align="center" > Time of growth: {tier.timeOfGrowth} days</Typography>
-                    
                     </CardContent>
                     <CardActions sx={{ backgroundColor: "#edeec9"}}>
-                    {tier.visibility ? <DeletePlantWindow/> : null }
+                    {tier.visibility ? <PlantsTileHandle /> : null }
                     </CardActions>
                   </Card>
                 </Grid>

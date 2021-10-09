@@ -1,5 +1,5 @@
 import React from 'react'
-import PlantTile from './PlantTile';
+import PlantTile from '../PlantTile';
 import Divider from '@mui/material/Divider';
 import Container from '@mui/material/Container';
 import Typography from '@mui/material/Typography';
@@ -8,8 +8,10 @@ import Grid from '@mui/material/Grid';
 import { useState } from "react";
 import AddIcon from '@mui/icons-material/Add';
 
-import PlantForm from './PlantForm';
-import DialogPage from './DialogPage';
+import PlantForm from '../PlantForm';
+import DialogPage from '../DialogPage';
+import Footer from '../Footer';
+import Topic from '../Topic';
 
 const tiers = [
     {
@@ -170,22 +172,17 @@ export default function PlantsPage() {
 
         return(
             <React.Fragment>
-               <Container disableGutters  maxWidth="md" component="main" sx={{ pt: 6, pb: 4 }}>
-              <Typography  component="h1" variant="h4" align="center" color="text.primary" gutterBottom>
-                Collection of your plants
-              </Typography>
-              <Typography variant="h7" align="center" color="text.secondary" component="p">
-               Set the breeding requirements of your plants and adjust them to your garden on an ongoing basis.
-              </Typography>
-              <Divider sx={{ pt: 6, pb: 2, backgroundColor: "#ffffff", border: "#ffffff"}} />
+              <Topic title = "Collection of your plants" text = "Set the breeding requirements of your plants and adjust them to your garden on an ongoing basis.."/>
+              <Container disableGutters maxWidth="xs" component="main" sx={{  pb: 4 }}>
               <Grid alignItems="flex-end">
                 <Button onClick = {() => setOpenForm(true)} fullWidth position="absolute" variant="contained" color ='inherit' sx={{ backgroundColor: "#F8D090",  alignItems: 'flex-end' }} size="medium"><AddIcon/>Add new plant</Button>
               </Grid>
-              </Container>           
+              </Container>
             <PlantTile tiers={tiers}/>
             <DialogPage title = "Add new plant" openForm = {openForm} setOpenForm = {setOpenForm}>
               <PlantForm/>
             </DialogPage>
+            <Footer/>
             </React.Fragment>
         )
     
