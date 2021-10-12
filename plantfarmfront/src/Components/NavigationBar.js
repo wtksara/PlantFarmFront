@@ -35,11 +35,7 @@ function NavigationBar() {
       </AppBar>
       <AppBar
       />
-      <Container sx = {{left: -30, position:"absolute"}} maxWidth="xs">
-      <AppBar variant="dense"  position="sticky"> <Toolbar >  
-        </Toolbar>
-        </AppBar>
-      </Container>
+      
  
     </React.Fragment>
   );

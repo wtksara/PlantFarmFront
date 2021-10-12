@@ -5,55 +5,34 @@ import Divider from '@mui/material/Divider';
 import Container from '@mui/material/Container';
 
 import Footer from '../Footer';
-import PlantTile from '../PlantTile';
+import PlantTile from '../Tiles/PlantTile';
 import Topic from '../Topic'
 import Table from '../Table';
-
-  const tiers = [
-    {
-      title: 'Pumpkin',
-      type:"Vegetable",
-      picture: {
-        image: 'D:\Programming\PlantFarmFront\plantfarmfront\src\Images\pumpkin.png',
-        width: '50',
-      },
-      humidity: "72",
-      temperature: "20",
-      timeOfGrowth: "20"
-    },
-    {
-      title: 'Cucumber',
-      type:"Vegetable",
-      picture: {
-        image: 'D:\Programming\PlantFarmFront\plantfarmfront\src\Images\pumpkin.png',
-        width: '50',
-      },
-      humidity: "75",
-      temperature: "23",
-      timeOfGrowth: "20"
-    },
-    {
-      title: 'Peper',
-      type:"Vegetable",
-      picture: {
-        image: 'D:\Programming\PlantFarmFront\plantfarmfront\src\Images\pumpkin.png',
-        width: '50',
-      },
-      humidity: "80",
-      temperature: "30",
-      timeOfGrowth: "20"
-    },
-  ];
-
+import PlantService from '../../Services/PlantService'
 
 class MainPage extends React.Component{
+
+    constructor(props){
+        super(props)
+
+    this.state = {
+        plants: [] 
+    }
+    } 
+
+    componentDidMount(){
+      PlantService.getPlants().then((response) => {
+      this.setState({plants: response.data});
+      });
+    }
+
     render(){
         return(
             <React.Fragment>
             <GlobalStyles styles={{ ul: { margin: 0, padding: 0, listStyle: 'none' } }} />
             <CssBaseline />
             <Topic title ="Plants" text="Create you own plant collection. Set the breeding requirements of your plants and adjust them to your garden on an ongoing basis." />
-            <PlantTile tiers={tiers}/>
+            <PlantTile plants={this.state.plants} visibility ={false}/>
             <Divider sx={{ pt: 1, pb: 6 }} />
             <Container maxWidth sx ={{ pt: 2, pb: 2 ,alignItems: 'flex-end' , backgroundColor: "#edeec9"}} >
             <Topic title ="Managment" text="Manage your plant crops from the control panel.You can monitor the condition of your plants on an ongoing basis and water them remotely." />
