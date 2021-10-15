@@ -37,6 +37,10 @@ import {
                       <Typography component="li" variant="subtitle1" align="center" > Time of growth: {plant.amountOfDays} days</Typography>
                     </CardContent>
                     <CardActions sx={{ backgroundColor: "#edeec9"}}>
+                    
+                    {visibility ? 
+                    (      
+                    <React.Fragment>
                     <Button 
                       variant="outlined" 
                       variant="contained" 
@@ -59,6 +63,11 @@ import {
                       key={plant.id} 
                       to={{ pathname: `/plants/delete/${plant.id}`,state: { background: location } }}>
                       Delete</Button>
+                      </React.Fragment>
+                     )
+                     :
+                     ( <div/> )
+                     }
                   </CardActions>
                   </Card>
                 </Grid>

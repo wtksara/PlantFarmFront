@@ -29,7 +29,9 @@ class PlantsPage extends React.Component {
             this.setState({plants: response.data});
         });
     }
-      closeForm = () => { this.setState({ openForm: false });}
+
+
+    closeForm = () => { this.setState({ openForm: false });}
 
       render() {
         return(
@@ -50,7 +52,7 @@ class PlantsPage extends React.Component {
                       <AddIcon/>Add new plant</Button> 
               </Grid>
               </Container>
-            <PlantTile plants={this.state.plants} visibility = "false"/>
+            <PlantTile plants={this.state.plants} visibility = {true}/>
             <Footer/>
             </React.Fragment>
         )

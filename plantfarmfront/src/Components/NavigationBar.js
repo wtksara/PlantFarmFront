@@ -21,7 +21,7 @@ function NavigationBar() {
   return (
     <React.Fragment>
       <Toolbar sx={{ borderBottom: 1, borderColor: 'divider'}}>
-        <Link href='main' underline="none" variant="h5" color="inherit" align="center" noWrap sx={{ flex: 1 }}> Plant Farm</Link>
+        <Link href='/' underline="none" variant="h5" color="inherit" align="center" noWrap sx={{ flex: 1 }}> Plant Farm</Link>
       </Toolbar>
       <CssBaseline />
       <AppBar fixed ="top" component="nav" position="static" color="default" elevation={0} sx={{ borderBottom: (theme) => `1px solid ${theme.palette.divider}`, backgroundColor: "#edeec9"}}>

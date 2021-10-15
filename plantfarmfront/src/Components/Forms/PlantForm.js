@@ -9,6 +9,10 @@ import FormLabel from '@mui/material/FormLabel';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Radio from '@mui/material/Radio';
 import Image from 'material-ui-image';
+import { useHistory } from "react-router-dom";
+import PlantService from '../../Services/PlantService'
+import { useEffect } from 'react';
+import {withRouter} from 'react-router-dom';
 
 const useStyle = makeStyles(theme => ({
     root: {
@@ -32,11 +36,11 @@ const buttonStyle = makeStyles(theme => ({
 ));
 
 const typeOfPlant = [
-    { id: 'fruit', title: 'Fruit' },
-    { id: 'vegetable', title: 'Vegetable' },
-    { id: 'herbs', title: 'Herb' },
-    { id: 'flower', title: 'Flower' },
-    { id: 'other', title: 'Other' },
+    { id: 'Fruit', title: 'Fruit' },
+    { id: 'Vegetable', title: 'Vegetable' },
+    { id: 'Herbs', title: 'Herb' },
+    { id: 'Flower', title: 'Flower' },
+    { id: 'Other', title: 'Other' },
 ]
 
 const initial = {
@@ -44,17 +48,31 @@ const initial = {
     name: '',
     humidity: '',
     temperature: '',
-    timeOfGrowth: '',
+    amountOfDays: '',
     type: 'other',
 }
+ const PlantForm = (props) =>  {
 
-export default function PlantForm(props) {
-
+    const { id } = props.match.params;
     const [ values, setValues] = useState(initial);
     const [ errors, setErrors] = useState({});
+    let history = useHistory();
 
     const classes  = useStyle();
     const button  = buttonStyle();
+
+    
+    useEffect(() => {
+        getProfile(); 
+      })
+    
+    const getProfile = (props) => { // <-- function takes props object!!
+        PlantService.getPlantById(id).then((res) => {
+            setValues(res.data);
+        }
+        )
+    }
+
 
     const handleInputChange = x => {
         const {name, value} = x.target
@@ -65,10 +83,16 @@ export default function PlantForm(props) {
         
     }
   
-    const handleSubmit= x => {
+    const handleSubmit = x => {
         x.preventDefault()
-        if (validate())
-        window.alert('testing')
+        if (validate()) {
+        let plant= {name: values.name, type: values.type, photo : "", humidity: values.humidity, temperature: values.temperature, amountOfDays: values.amountOfDays };
+        console.log('employee => ' + JSON.stringify(plant) )
+        PlantService.addPlant(plant).then(res => { 
+            history.push('/plants');
+            window.location.reload();
+        })
+        }
     }
 
     const validate=() => {
@@ -76,7 +100,7 @@ export default function PlantForm(props) {
         formErrors.name = values.name ? "" : "This field is required."
         formErrors.humidity = (/^[0-9]{2}$|^[0-9]{1}$/).test(values.humidity) ? "" : "Maxiumum 2 numbers required"
         formErrors.temperature = (/^[0-9]{2}$|^[0-9]{1}$/).test(values.temperature) ? "" : "Maxiumum 2 numbers required"
-        formErrors.timeOfGrowth = (/^[0-9]{2}$|^[0-9]{1}$|^[0-9]{3}$/).test(values.timeOfGrowth) ? "" : "Maxiumum 3 numbers required"
+        formErrors.amountOfDays = (/^[0-9]{2}$|^[0-9]{1}$|^[0-9]{3}$/).test(values.amountOfDays) ? "" : "Maxiumum 3 numbers required"
         setErrors({
             ...formErrors
         })
@@ -116,10 +140,10 @@ export default function PlantForm(props) {
                      <TextField
                         variant="filled" 
                         label = "Time of growth [days]"
-                        name = "timeOfGrowth"
-                        value = {values.timeOfGrowth}
+                        name = "amountOfDays"
+                        value = {values.amountOfDays}
                         onChange = {handleInputChange}
-                        {...(errors.timeOfGrowth && {error:true, helperText:errors.timeOfGrowth})}
+                        {...(errors.amountOfDays && {error:true, helperText:errors.amountOfDays})}
                     />
                   
                 </Grid>
@@ -140,10 +164,12 @@ export default function PlantForm(props) {
                     </FormControl>      
                 </Grid>
                 <Grid classes={{root:button.root}} item xs={12}> 
-                <Button onClick={handleSubmit} variant ="contained"  size ="medium" color ='inherit' sx={{ backgroundColor: "#adc178", mr: 1  }}> Submit</Button>
+                <Button onClick={handleSubmit} variant ="contained"  size ="medium" color ='inherit' sx={{ backgroundColor: "#adc178", mr: 1 }}> Submit</Button>
                 </Grid>
               </Grid>
             </form>
     
     )
 }
+
+export default withRouter(PlantForm);

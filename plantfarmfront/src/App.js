@@ -11,6 +11,7 @@ import NavigationBar from './Components/NavigationBar';
 import DeleteDialog from './Components/Dialogs/DeleteDialog'
 import EditDialog from './Components/Dialogs/EditDialog'
 import AddDialog from './Components/Dialogs/AddDialog'
+import EndDialog from './Components/Dialogs/EndDialog'
 
 import{ BrowserRouter as Router,
         Switch,
@@ -29,12 +30,13 @@ function Paths() {
       <Route path ="/managment" exact component ={ManagmentPage}/>
       <Route path ="/history" exact component ={HistoryPage}/>
       <Route path ="/login" exact component ={LoginPage}/>
-      <Route path ="/main" exact component ={MainPage}/>
+      <Route path ="/" exact component ={MainPage}/>
       </Switch>
 
       {background && <Route path="/plants/edit/:id" children={<EditDialog/>} />}
       {background && <Route path="/plants/delete/:id" children={<DeleteDialog/>} />}
       {background && <Route path="/plants/add/" children={<AddDialog/>} />}
+      {background && <Route path="/managment/patchs/delete/:id" children={<EndDialog/>} />}
     </div>
   );
 }
