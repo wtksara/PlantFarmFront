@@ -61,18 +61,13 @@ const initial = {
     const classes  = useStyle();
     const button  = buttonStyle();
 
-    
-    useEffect(() => {
-        getProfile(); 
-      })
-    
-    const getProfile = (props) => { // <-- function takes props object!!
+      useEffect(() => {
         PlantService.getPlantById(id).then((res) => {
             setValues(res.data);
         }
         )
-    }
-
+      }, []);
+   
 
     const handleInputChange = x => {
         const {name, value} = x.target
@@ -87,12 +82,23 @@ const initial = {
         x.preventDefault()
         if (validate()) {
         let plant= {name: values.name, type: values.type, photo : "", humidity: values.humidity, temperature: values.temperature, amountOfDays: values.amountOfDays };
-        console.log('employee => ' + JSON.stringify(plant) )
         PlantService.addPlant(plant).then(res => { 
             history.push('/plants');
             window.location.reload();
         })
         }
+    }
+
+    const handleEdit = x => {
+        x.preventDefault()
+        if (validate()) {
+        let plant= {name: values.name, type: values.type, photo : "", humidity: values.humidity, temperature: values.temperature, amountOfDays: values.amountOfDays };
+        PlantService.updatePlant(plant, id).then(res => {
+            history.push('/plants');
+            window.location.reload();
+        })
+
+    }
     }
 
     const validate=() => {
@@ -164,7 +170,11 @@ const initial = {
                     </FormControl>      
                 </Grid>
                 <Grid classes={{root:button.root}} item xs={12}> 
-                <Button onClick={handleSubmit} variant ="contained"  size ="medium" color ='inherit' sx={{ backgroundColor: "#adc178", mr: 1 }}> Submit</Button>
+                {id ==null ? 
+                (  <Button onClick={handleSubmit} variant ="contained"  size ="medium" color ='inherit' sx={{ backgroundColor: "#adc178", mr: 1 }}> Submit</Button>)
+                    :
+                (  <Button onClick={handleEdit} variant ="contained"  size ="medium" color ='inherit' sx={{ backgroundColor: "#adc178", mr: 1 }}> Edit</Button>)
+                }
                 </Grid>
               </Grid>
             </form>

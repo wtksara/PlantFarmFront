@@ -2,11 +2,26 @@ import * as React from 'react';
 import { DialogActions, 
          Button } 
          from '@mui/material';
+import { withRouter, 
+         useHistory} 
+         from 'react-router-dom';
 
 import DialogPage from './DialogPage';
+import PlantService from '../../Services/PlantService'
 
-export default function DeleteDialog() {
+const DeleteDialog = (props) => {
  
+  const { id } = props.match.params;
+  let history = useHistory();
+
+  const handleDelete = x => {
+    PlantService.deletePlant(id).then(res => { 
+        history.push('/plants');
+        window.location.reload();
+    })
+  }
+
+
     return (
       <React.Fragment>
       <DialogPage 
@@ -17,6 +32,7 @@ export default function DeleteDialog() {
           autoFocus 
           variant="contained" 
           color ='inherit' 
+          onClick={handleDelete}
           sx={{ backgroundColor: "#F4B752"}}  
           size="medium">
           Delete </Button>
@@ -25,3 +41,5 @@ export default function DeleteDialog() {
   </React.Fragment>
     );
   }
+  
+export default withRouter(DeleteDialog);

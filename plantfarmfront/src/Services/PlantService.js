@@ -12,8 +12,17 @@ class PlantService {
         return axios.post(PLANTS_API_BASE_URL, plant);
     }
 
-    getPlantById(id){
-        return axios.get(PLANTS_API_BASE_URL + '/' + id);
+    getPlantById(plantId){
+        return axios.get(PLANTS_API_BASE_URL + '/' + plantId);
     }
+
+    updatePlant(plant, plantId){
+        return axios.put(PLANTS_API_BASE_URL + '/' + plantId,  plant);
+    }
+
+    deletePlant(plantId){
+        return axios.delete(PLANTS_API_BASE_URL + '/' + plantId);
+    }
+
 }
 export default new PlantService()
