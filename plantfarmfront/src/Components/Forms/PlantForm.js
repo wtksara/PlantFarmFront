@@ -36,7 +36,6 @@ const buttonStyle = makeStyles(theme => ({
 ));
 
 const typeOfPlant = [
-    { id: 'Fruit', title: 'Fruit' },
     { id: 'Vegetable', title: 'Vegetable' },
     { id: 'Herbs', title: 'Herb' },
     { id: 'Flower', title: 'Flower' },

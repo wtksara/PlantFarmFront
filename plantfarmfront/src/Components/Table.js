@@ -24,33 +24,36 @@ import KeyboardArrowRight from '@mui/icons-material/KeyboardArrowRight';
 import FirstPageIcon from '@mui/icons-material/FirstPage';
 import LastPageIcon from '@mui/icons-material/LastPage';
 import {withStyles}  from '@material-ui/core/styles';
+import CheckBoxOutlineBlankIcon from '@mui/icons-material/CheckBoxOutlineBlank';
+import CheckBoxIcon from '@mui/icons-material/CheckBox';
 
 const rows = [ // You have to pass data in acending order
-    createData(1,'Tomato', 1, [
+    createData(1,'Peper', 2, false,[
     {date: '2020-01-05', humidity: 20, temperature: 15,  other: 15,},
     {date: '2020-01-02', humidity: 30, temperature: 1, other: 25, },]),
-    createData(2,'Peper', 2, [
+    createData(2,'Peper', 2, false,[
     {date: '2020-01-05', humidity: 20, temperature: 15,  other: 15,},
     {date: '2020-01-02', humidity: 30, temperature: 1, other: 25, },]),
-    createData(3,'Pumpkin', 1, [
+    createData(3,'Pumpkin', 1,false, [
     {date: '2020-01-05', humidity: 20, temperature: 15,  other: 15,},
     {date: '2020-01-02', humidity: 30, temperature: 1, other: 25, },]),
-    createData(4,'Basil', 2, [
+    createData(4,'Basil', 2, true,[
     {date: '2020-01-05', humidity: 20, temperature: 15,  other: 15,},
     {date: '2020-01-02', humidity: 30, temperature: 1, other: 25, },]),
-    createData(5,'Cabagge', 3,[
+    createData(5,'Cabagge', 3, true,[
     {date: '2020-01-05', humidity: 20, temperature: 15,  other: 15,},
     {date: '2020-01-02', humidity: 30, temperature: 1, other: 25, },]),
-    createData(6,'Cabagge', 3,[
+    createData(6,'Cabagge', 3, true,[
     {date: '2020-01-05', humidity: 20, temperature: 15,  other: 15,},
     {date: '2020-01-02', humidity: 30, temperature: 1, other: 25, },]),
   ]
 
-function createData(id, name, patch, history) {
+function createData(id, name, patch, finished, history) {
   return {
     id,
     name,
     patch,
+    finished,
     history,
   };
 }
@@ -71,7 +74,10 @@ function Row(props) {
         </TableCell>
         <TableCell align="left"> {row.id}</TableCell>
         <TableCell align="left">{row.name}</TableCell>
-        <TableCell align="right">{row.patch}</TableCell>
+        <TableCell align="left">{row.patch}</TableCell>
+        <TableCell align="right"> {row.finished ? 
+                    (  <CheckBoxIcon/>) : (<CheckBoxOutlineBlankIcon/>)}
+        </TableCell>
       </TableRow>
 
       <TableRow >
@@ -200,7 +206,8 @@ export default function CollapsibleTable() {
             <TableCell align="left" />
             <TableCell align="left">ID</TableCell>
             <TableCell align="left">Plant</TableCell>
-            <TableCell align="right">Patch</TableCell>
+            <TableCell align="left">Patch</TableCell>
+            <TableCell align="right">Finished</TableCell>
           </TableRow>
         </TableHead>
         <TableBody >  

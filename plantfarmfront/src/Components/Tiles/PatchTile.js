@@ -24,24 +24,53 @@ import FormHelperText from '@mui/material/FormHelperText';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 import sun from './sun.jpg';
+import PlantService from '../../Services/PlantService'
 
-    const PatchTile = (props) =>{
-      let location = useLocation();
-      const {patchs,visibility} = props;
-    
-    const [type, setType] = React.useState('');
+import { useEffect,
+         useState} from 'react'
+         
+const initial = [{
+  id: 0,
+  name: "",}
+]
 
-    const handleChange = (event) => {
-        setType(event.target.value);
-    };
+const PatchTile = (props) =>{
+    let location = useLocation();
+    const {patches, visibility} = props;
+    const [values, setValues] = useState(initial);
+    const [patchOne, setPatchOne] = React.useState(0);
+    const [patchTwo, setPatchTwo] = React.useState(0);
+    const [patchThree, setPatchThree] = React.useState(0);
+
+    function handleChange(id, event) {
+        console.log(id);
+        if (id == 1) return setPatchOne(event.target.value);
+        else if (id == 2) return setPatchTwo(event.target.value);
+        else if (id == 3)  return setPatchThree(event.target.value);
+    }
+
+    function whichPatch(id){
+      if (id == 1) return patchOne;
+      else if (id ==2)  return patchTwo; 
+      else if (id ==3)return  patchThree;   
+    }
+
     
+    useEffect(() => {
+      PlantService.getPlants().then((res) => {
+          setValues(res.data);
+      }
+      )
+    }, []);
+
     function setMarks(patch){
+      
       var marks= [ 
           { value: 0, label: "0",},
-          { value: parseInt(patch.timeOfGrowth)*0.25, label: (parseInt(patch.timeOfGrowth)*0.25).toString(),},
-          { value: parseInt(patch.timeOfGrowth)*0.50, label: (parseInt(patch.timeOfGrowth)*0.50).toString(),},
-          { value: parseInt(patch.timeOfGrowth)*0.75, label: (parseInt(patch.timeOfGrowth)*0.75).toString(),},
-          { value: parseInt(patch.timeOfGrowth)*1, label: (parseInt(patch.timeOfGrowth)*1).toString(),},
+          { value: parseInt(patch.amountOfDays*0.25), label: (parseInt(patch.amountOfDays*0.25)).toString(),},
+          { value: parseInt(patch.amountOfDays*0.50), label: (parseInt(patch.amountOfDays*0.50)).toString(),},
+          { value: parseInt(patch.amountOfDays*0.75), label: (parseInt(patch.amountOfDays*0.75)).toString(),},
+          { value: patch.amountOfDays, label: (parseInt(patch.amountOfDays)*1).toString(),},
         ]
       return marks
     }
@@ -80,22 +109,23 @@ import sun from './sun.jpg';
      
     }
 
-
+    
+   
+    
     return (
       <React.Fragment>
       <Container maxWidth="md" component="main" sx={{ pt: 0, pb: 8 , backgroundColor: "#ffffff" }} >
       <Grid container spacing={2} mt ={0.5} alignItems="flex-end"> 
-      {patchs.map((patch) => (
-        <Grid item key={patch.id}  xs={12} sm={6} md={4} >
-         
-      {patch.isEmpty ? 
+      {patches.map((patch) => (
+        <Grid item key={patch.patchId}  xs={12} sm={6} md={4} >
+      {patch.plantName == null ? 
       (
         <Card sx={{ borderLeft: 4, borderRight:4 ,borderTop: 4, borderBottom: 4, borderColor : "#b08968", borderStyle: 'solid'}}> 
         <AppBar position="static" color="default" elevation={0} sx={{ borderBottom: '1px solid rgba(0, 0, 0, 0.12)' }} >
         <Toolbar sx={{ backgroundColor: "#e6ccb2"}}>
           <Grid container spacing={2} alignItems="center"  >
             <Grid item xs >
-               <CardHeader title={"Empty patch"} subheader={"Choose the type"} titleTypographyProps={{ align: 'center' }} subheaderTypographyProps={{ align: 'center', }} />
+               <CardHeader title={"Empty patch"} subheader={"Choose the plant"} titleTypographyProps={{ align: 'center' }} subheaderTypographyProps={{ align: 'center', }} />
            </Grid>
            </Grid>
          </Toolbar>
@@ -106,20 +136,19 @@ import sun from './sun.jpg';
          {visibility ? 
           ( 
          <FormControl fullWidth>
-        <InputLabel id="info-label">Type</InputLabel>
+        <InputLabel id="info-label">Plant</InputLabel>
         <Select
-          value={type}
-          label="Type"
-          onChange={handleChange}
+          label="Select"
+          onChange={(e) => handleChange(patch.patchId, e)}
         >
-          <MenuItem value={1}>Tommato</MenuItem>
-          <MenuItem value={2}>Cucumber</MenuItem>
-          <MenuItem value={3}>Pumpkin</MenuItem>
+          {values.map((value) => (
+          <MenuItem value={value.id}>{value.name}</MenuItem>
+          ))}
         </Select>
         </FormControl>
          ) 
          :
-         (<Grid item xs  sx={{pt: 7.5}}/>) 
+         (<Grid item xs sx={{pt: 7.5}}/>) 
          }  
         </Grid>
         </Grid>
@@ -139,6 +168,7 @@ import sun from './sun.jpg';
                 size="medium" 
                 component={Link} 
                 key={patch.id} 
+                to={{ pathname: `/managment/patches/${patch.patchId}/plants/${whichPatch(patch.patchId)}`,state: { background: location}}}
                 >
                 Select type</Button> 
           ) 
@@ -159,7 +189,7 @@ import sun from './sun.jpg';
         <Toolbar sx={{ backgroundColor: "#edeec9"}}>
           <Grid container spacing={2} alignItems="center">
             <Grid item xs >
-               <CardHeader title={patch.title} subheader={patch.type} titleTypographyProps={{ align: 'center' }} subheaderTypographyProps={{ align: 'center', }} />
+               <CardHeader title={patch.plantName} subheader={patch.plantType} titleTypographyProps={{ align: 'center' }} subheaderTypographyProps={{ align: 'center', }} />
            </Grid>
            </Grid>
          </Toolbar>
@@ -167,7 +197,7 @@ import sun from './sun.jpg';
         <CardContent sx={{ backgroundColor: "#ffffff"}}>
             <Grid container spacing = {1} alignItems="flex-end">
               <Grid item>
-                <Typography variant="h2" align="center" >{patch.temperature}°C</Typography>
+                <Typography variant="h2" align="center" >{patch.actualTemperature}°C</Typography>
               </Grid>
               <Grid item>
               <CardMedia  image={sun}  style={{ height:70 , width : 85}} />
@@ -175,17 +205,17 @@ import sun from './sun.jpg';
             </Grid>
             <Grid container spacing ={2} sx={{ pb:5 }} alignItems="flex-end">
               <Grid item>
-                <Typography variant="h6" align="center" > Humidity: {patch.humidity} %</Typography>
+                <Typography variant="h6" align="center" > Humidity: {patch.actualHumidity} %</Typography>
               </Grid>
             </Grid>
             <CustomSlider
             aria-label="Always visible"
             disabled 
-            defaultValue={patch.actualDay}
+            defaultValue={patch.actualAmountOfDays}
             step={5}
             marks={setMarks(patch)}
             max={0}
-            max={patch.timeOfGrowth}
+            max={patch.amountOfDays}
             valueLabelDisplay="on"
           />
           <Grid>
@@ -207,7 +237,7 @@ import sun from './sun.jpg';
                 size="medium" 
                 component={Link} 
                 key={patch.key} 
-                to={{ pathname: `/managment/patchs/delete/${patch.key}`,state: { background: location } }}>
+                to={{ pathname: `/managment/patches/delete/${patch.patchId}`,state: { background: location , amountOfDays : patch.amountOfDays}}}>
                 End cultivation</Button>  
             ) 
             :
@@ -217,8 +247,6 @@ import sun from './sun.jpg';
             </Grid>
             </CardActions>
             </Card>
-            
-            
             
       )}
       < CreateAlert patch = {patch}/>
