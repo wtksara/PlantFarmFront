@@ -10,7 +10,7 @@ import Button from '@mui/material/Button';
 
 export default function WaterTank(props) {
     
-    const {visibility} = props;
+    const {tank, visibility} = props;
 
     const CustomSlider = withStyles({
 
@@ -39,7 +39,29 @@ export default function WaterTank(props) {
           { value: 75, label: '75%', },
           { value: 96, label: '100%',},
         ];
-
+      
+        function tankValue(tank){
+           var value = tank.level;
+           switch (value) {
+             case 0:
+              return 0
+              break;
+             case 1:
+              return 25;
+              break;
+             case 2:
+              return 50;
+              break;
+             case 3:
+              return 75;
+              break;
+             case 4:
+              return 100;
+              break;
+            default:
+              break;
+           }
+          }
         return(
             <React.Fragment>
             <Topic title ="Water tank" text="Check the condition of your plants in control panel. Based on the actual measurments and uncoming alerts decided if your plants need the water. " />
@@ -48,7 +70,7 @@ export default function WaterTank(props) {
                 <CustomSlider
                 disabled
                 aria-label="Restricted values"
-                defaultValue={50}
+                defaultValue={tankValue(tank)}
                 orientation="vertical"
                 step={25}
                 valueLabelDisplay="auto"
@@ -57,7 +79,7 @@ export default function WaterTank(props) {
             </Grid>
             <Grid align="center" sx={{ pt: 3 }}>
             { visibility ? (
-                <Button variant="contained" color ='inherit' sx={{ backgroundColor: "#42a5f5"}}  size="medium"> Water plants</Button>
+                <Button variant="contained" color ='inherit' sx={{ backgroundColor: "#42a5f5"}}  size="medium">Water plants</Button>
             ) :(
                 <div/>
             ) }

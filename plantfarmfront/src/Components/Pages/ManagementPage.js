@@ -16,19 +16,24 @@ import WaterTank from '../WaterTank';
 import Footer from '../Footer';
 import Topic from '../Topic';
 import PatchService from '../../Services/PatchService'
+import TankService from '../../Services/TankService'
 
-class ManagmentPage extends React.Component {
+class ManagementPage extends React.Component {
 
     constructor(props){
       super(props)
       this.state = {
           patches: [] ,
+          tank:[]
       }
   }
  
   componentDidMount(){
     PatchService.getPatches().then((response) => {
         this.setState({patches: response.data});
+    });
+    TankService.getTank().then((response) => {
+        this.setState({tank: response.data});
     });
 }
   render() {
@@ -38,9 +43,9 @@ class ManagmentPage extends React.Component {
             <CssBaseline />
             <Topic title = "Your cultivations" 
             text = "Manage your plant crops from the control panel. You can monitor the condition of your plants on an ongoing basis and water them remotely."/>
-             <PatchTile patches={this.state.patches} visibility ={true}/>
+            <PatchTile patches={this.state.patches} visibility ={true}/>
             <Container maxWidth sx ={{ pb: 4 ,alignItems: 'flex-end' , backgroundColor: "#edeec9"}} >
-            <WaterTank visibility ={true}/>
+            <WaterTank tank = {this.state.tank} visibility ={true}/>
             </Container>
             <Footer/>
             </React.Fragment>
@@ -48,4 +53,4 @@ class ManagmentPage extends React.Component {
   }
     
 }
-export default ManagmentPage
+export default ManagementPage

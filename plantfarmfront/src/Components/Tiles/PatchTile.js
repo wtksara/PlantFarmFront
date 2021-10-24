@@ -41,9 +41,10 @@ const PatchTile = (props) =>{
     const [patchOne, setPatchOne] = React.useState(0);
     const [patchTwo, setPatchTwo] = React.useState(0);
     const [patchThree, setPatchThree] = React.useState(0);
+    
+
 
     function handleChange(id, event) {
-        console.log(id);
         if (id == 1) return setPatchOne(event.target.value);
         else if (id == 2) return setPatchTwo(event.target.value);
         else if (id == 3)  return setPatchThree(event.target.value);
@@ -83,33 +84,73 @@ const PatchTile = (props) =>{
     })(Slider);
     
   
+
+
     function alertColor(patch){
-      if (patch.error == 0 ) {
-        return "#A9C47F";
-      } 
-      else if (patch.error == 1 ) {
-        return "#d00000";
-      } 
-      else {
-        return "#e85d04";
+      var temperatureDifference = patch.actualTemperature - patch.temperature;
+      var humidityDifference = patch.actualHumidity - patch.humidity;
+  
+      if (temperatureDifference > 10 ) {
+          if (humidityDifference > 10 )
+            return "#d00000" 
+          else if (humidityDifference >5)
+            return "#d00000" 
+          else 
+            return "#d00000"
       }
-    
+      else if (temperatureDifference > 5) { 
+          if (humidityDifference > 10 )
+            return "#d00000" 
+          else if (humidityDifference >5)
+           return "#e85d04" 
+         else 
+           return  "#e85d04" 
+      }
+      else {
+        if (humidityDifference > 10 )
+          return  "#d00000" 
+        else if (humidityDifference > 5)
+          return  "#A9C47F" 
+        else
+          return  "#A9C47F" 
+      }
     }
 
-    function CreateAlert(props) {
-      if (props.patch.error == 0 ) {
-        return <Grid sx={{ pb:6.5}}/>;
-      } 
-      else if (props.patch.error == 1 ) {
-        return <Alert sx={{ borderLeft: 4, borderRight:4 , borderTop: 0 ,borderBottom: 4, borderColor : alertColor(props.patch), borderStyle: 'solid'}} severity="error">This is an error message!</Alert>;
-      } 
-      else {
-        return <Alert sx={{ borderLeft: 4, borderRight:4 , borderTop: 0 ,borderBottom: 4, borderColor : alertColor(props.patch), borderStyle: 'solid'}} severity="warning">This is an warning message!</Alert>;
-      }
-     
+    function CreateAlert( props ) {
+        return <Alert sx={{ borderLeft: 4, borderRight:4 , borderTop: 0 ,borderBottom: 4, borderColor : props.color, borderStyle: 'solid'}} severity = {props.type}> {props.text}</Alert>;  
     }
 
-    
+    function CheckAlert (props){
+      var temperatureDifference = props.patch.actualTemperature - props.patch.temperature;
+      var humidityDifference = props.patch.actualHumidity - props.patch.humidity;
+  
+      if (temperatureDifference > 10 ) {
+          if (humidityDifference > 10 )
+            return <CreateAlert color = "#d00000" type = "error"  text= "Temperature and humidity are definitely to high !"/>
+          else if (humidityDifference > 5)
+            return <CreateAlert color = "#d00000" type = "error"  text= "Temperature is to high ! Humidity is above the average. "/>
+          else 
+            return <CreateAlert color = "#d00000" type = "error"  text= " Temperature is definitely to high !"/>
+      }
+      else if (temperatureDifference > 5) { 
+          if (humidityDifference > 10 )
+            return <CreateAlert color = "#d00000" type = "error"  text= "Temperature is above average. Humidity is to high!"/>
+          else if (humidityDifference > 5)
+           return <CreateAlert color = "#e85d04" type = "warning"  text= "Temperature and humidity are above the average."/>
+         else 
+           return <CreateAlert color = "#e85d04" type = "warning"  text= "Temperature is above the average. "/>
+      }
+      else {
+        if (humidityDifference > 10 )
+          return <CreateAlert color = "#d00000" type = "error"  text= "Humidity is to definitely high!"/>
+        else if (humidityDifference > 5)
+          return <CreateAlert color = "#A9C47F" type = "warning"  text= "Humidity is above the average."/>
+        else
+          return <Grid sx={{ pb:5}}/>;
+      }
+
+    }
+
    
     
     return (
@@ -168,8 +209,8 @@ const PatchTile = (props) =>{
                 size="medium" 
                 component={Link} 
                 key={patch.id} 
-                to={{ pathname: `/managment/patches/${patch.patchId}/plants/${whichPatch(patch.patchId)}`,state: { background: location}}}
-                >
+                to={{ pathname: whichPatch(patch.patchId) != 0 ? `/management/patches/${patch.patchId}/plants/${whichPatch(patch.patchId)}` : `/management/patches/none`,
+                 state: { background: location , title: "Plant has not been selected for that patch", topic: " You have to select plant to start cultivation"}}} >
                 Select type</Button> 
           ) 
           :
@@ -237,7 +278,7 @@ const PatchTile = (props) =>{
                 size="medium" 
                 component={Link} 
                 key={patch.key} 
-                to={{ pathname: `/managment/patches/delete/${patch.patchId}`,state: { background: location , amountOfDays : patch.amountOfDays}}}>
+                to={{ pathname: `/management/patches/delete/${patch.patchId}`,state: { background: location , amountOfDays : patch.amountOfDays}}}>
                 End cultivation</Button>  
             ) 
             :
@@ -249,7 +290,8 @@ const PatchTile = (props) =>{
             </Card>
             
       )}
-      < CreateAlert patch = {patch}/>
+
+      <CheckAlert patch = {patch}/>
       </Grid>
       ))}
       </Grid>

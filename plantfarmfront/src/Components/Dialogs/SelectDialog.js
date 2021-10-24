@@ -18,7 +18,7 @@ const SelectDialog = (props) => {
 
     const handleSelect = x => {
         PatchService.updatePatch(patchid, plantid).then(res => { 
-            history.push('/managment');
+            history.push('/management');
             window.location.reload();
         })
       }

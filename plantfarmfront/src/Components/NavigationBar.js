@@ -12,7 +12,7 @@ import Container from '@mui/material/Container';
 
 const sections = [
   { title: 'Plants', url: 'plants' },
-  { title: 'Managment', url: 'managment' },
+  { title: 'Management', url: 'management' },
   { title: 'History', url: 'history' },
 ];
 

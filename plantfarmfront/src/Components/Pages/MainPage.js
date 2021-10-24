@@ -9,6 +9,8 @@ import PlantTile from '../Tiles/PlantTile';
 import Topic from '../Topic'
 import Table from '../Table';
 import PlantService from '../../Services/PlantService'
+import PatchService from '../../Services/PatchService'
+import TankService from '../../Services/TankService'
 import PatchTile from '../Tiles/PatchTile';
 import WaterTank from '../WaterTank';
 
@@ -18,91 +20,26 @@ class MainPage extends React.Component{
         super(props)
 
     this.state = {
-        plants: [] 
+        plants: [] ,
+        patches: [],
+        tank:[]
     }
     } 
-
-   
     
     componentDidMount(){
       PlantService.getPlants().then((response) => {
       this.setState({plants: response.data});
       });
+      PatchService.getPatches().then((response) => {
+      this.setState({patches: response.data});
+      });
+      TankService.getTank().then((response) => {
+      this.setState({tank: response.data});
+      });
     }
+    
 
     render(){
-        const patchs = [
-            {
-              key:'1',
-              isEmpty:false,
-              title: 'Pumpkin',
-              type:"Vegetable",
-              picture: {
-                image: 'D:\Programming\PlantFarmFront\plantfarmfront\src\Images\pumpkin.png',
-                width: '50',
-              },
-              humidity: "72",
-              temperature: "20",
-              timeOfGrowth: "20",
-              actualDay: "5",
-            },
-            {
-              key:'2',
-              isEmpty:false,
-              title: 'Cucumber',
-              type:"Vegetable",
-              picture: {
-                image: 'D:\Programming\PlantFarmFront\plantfarmfront\src\Images\pumpkin.png',
-                width: '50',
-              },
-              humidity: "75",
-              temperature: "23",
-              timeOfGrowth: "20",
-              actualDay: "8",
-            },
-            {
-              key:'3',
-              isEmpty:false,
-              title: 'Cucumber',
-              type:"Vegetable",
-              picture: {
-                image: 'D:\Programming\PlantFarmFront\plantfarmfront\src\Images\pumpkin.png',
-                width: '50',
-              },
-              humidity: "80",
-              temperature: "30",
-              timeOfGrowth: "40",
-              actualDay: "15",
-            },  
-            {
-              key:'4',
-              isEmpty:true,
-              title: '',
-              type:"",
-              picture: {
-                image: '',
-                width: '',
-              },
-              humidity: "",
-              temperature: "",
-              timeOfGrowth: "",
-              actualDay: "",
-            },
-            {
-              key:'5',
-              isEmpty:false,
-              title: 'Cucumber',
-              type:"Vegetable",
-              picture: {
-                image: 'D:\Programming\PlantFarmFront\plantfarmfront\src\Images\pumpkin.png',
-                width: '50',
-              },
-              humidity: "80",
-              temperature: "30",
-              timeOfGrowth: "40",
-              actualDay: "15",
-            },  
-          ];
         return(
             <React.Fragment>
             <GlobalStyles styles={{ ul: { margin: 0, padding: 0, listStyle: 'none' } }} />
@@ -116,10 +53,10 @@ class MainPage extends React.Component{
             </Container>
             <Container maxWidth sx ={{ pt: 2, pb: 2 ,alignItems: 'flex-end' , backgroundColor: "#ffffff"}} >
             <Topic title ="Managment" text="Manage your plant crops from the control panel.You can monitor the condition of your plants on an ongoing basis and water them remotely." />
-            <PatchTile patchs={patchs} visibility={false}/>
+            <PatchTile patches={this.state.patches} visibility={false}/>
             </Container>
             <Container maxWidth sx ={{ pb: 4 ,alignItems: 'flex-end' , backgroundColor: "#fefae0"}} >
-            <WaterTank visibility ={false}/>
+            <WaterTank tank = {this.state.tank} visibility ={false}/>
             </Container>
             <Footer/>
             </React.Fragment>

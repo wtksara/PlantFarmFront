@@ -36,7 +36,7 @@ class PlantsPage extends React.Component {
       render() {
         return(
             <React.Fragment>
-              <Topic title = "Collection of your plants" text = "Set the breeding requirements of your plants and adjust them to your garden on an ongoing basis.."/>
+              <Topic title = "Collection of your plants" text = "Set the breeding requirements of your plants and adjust them to your garden on an ongoing basis."/>
               <Container disableGutters maxWidth="xs" component="main" sx={{  pb: 4 }}>
               <Grid alignItems="flex-end">
               <Button 

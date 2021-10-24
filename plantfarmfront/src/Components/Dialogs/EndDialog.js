@@ -35,7 +35,7 @@ const EndDialog = (props) => {
 
   const handleEnd = x => {
     PatchService.endPatch(id).then(res => { 
-        history.push('/managment');
+        history.push('/management');
         window.location.reload();
     })
   }
