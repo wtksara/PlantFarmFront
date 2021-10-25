@@ -53,7 +53,7 @@ const PatchTile = (props) =>{
     function whichPatch(id){
       if (id == 1) return patchOne;
       else if (id ==2)  return patchTwo; 
-      else if (id ==3)return  patchThree;   
+      else if (id ==3) return  patchThree;   
     }
 
     
@@ -241,7 +241,7 @@ const PatchTile = (props) =>{
                 <Typography variant="h2" align="center" >{patch.actualTemperature}°C</Typography>
               </Grid>
               <Grid item>
-              <CardMedia  image={sun}  style={{ height:70 , width : 85}} />
+              <CardMedia  image={sun}  sx={{ Color: "#edeec9", backgroundColor: "#edeec9"}} style={{ height:70 , width : 85}} />
               </Grid>
             </Grid>
             <Grid container spacing ={2} sx={{ pb:5 }} alignItems="flex-end">

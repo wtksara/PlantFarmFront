@@ -11,6 +11,7 @@ import Table from '../Table';
 import PlantService from '../../Services/PlantService'
 import PatchService from '../../Services/PatchService'
 import TankService from '../../Services/TankService'
+import CultivationService from '../../Services/CultivationService'
 import PatchTile from '../Tiles/PatchTile';
 import WaterTank from '../WaterTank';
 
@@ -22,7 +23,8 @@ class MainPage extends React.Component{
     this.state = {
         plants: [] ,
         patches: [],
-        tank:[]
+        tank:[],
+        cultivations: [],
     }
     } 
     
@@ -36,6 +38,9 @@ class MainPage extends React.Component{
       TankService.getTank().then((response) => {
       this.setState({tank: response.data});
       });
+      CultivationService.getAllCultivations().then((response) => {
+        this.setState({cultivations: response.data});
+        });
     }
     
 
@@ -49,7 +54,7 @@ class MainPage extends React.Component{
             <Divider sx={{ pt: 1, pb: 6 , backgroundColor: "#ffffff"}} />
             <Container maxWidth sx ={{ pt: 2, pb: 4 ,alignItems: 'flex-end' , backgroundColor: "#fefae0"}} >
             <Topic title ="History" text=" Check the history of measurements made during plant growth and, based on them, choose the best growing conditions for the plants to ensure the best quality." />
-            <Table/>
+            <Table cultivations = {this.state.cultivations}/>
             </Container>
             <Container maxWidth sx ={{ pt: 2, pb: 2 ,alignItems: 'flex-end' , backgroundColor: "#ffffff"}} >
             <Topic title ="Managment" text="Manage your plant crops from the control panel.You can monitor the condition of your plants on an ongoing basis and water them remotely." />

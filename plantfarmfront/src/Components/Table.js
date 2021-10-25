@@ -27,41 +27,10 @@ import {withStyles}  from '@material-ui/core/styles';
 import CheckBoxOutlineBlankIcon from '@mui/icons-material/CheckBoxOutlineBlank';
 import CheckBoxIcon from '@mui/icons-material/CheckBox';
 
-const rows = [ // You have to pass data in acending order
-    createData(1,'Peper', 2, false,[
-    {date: '2020-01-05', humidity: 20, temperature: 15,  other: 15,},
-    {date: '2020-01-02', humidity: 30, temperature: 1, other: 25, },]),
-    createData(2,'Peper', 2, false,[
-    {date: '2020-01-05', humidity: 20, temperature: 15,  other: 15,},
-    {date: '2020-01-02', humidity: 30, temperature: 1, other: 25, },]),
-    createData(3,'Pumpkin', 1,false, [
-    {date: '2020-01-05', humidity: 20, temperature: 15,  other: 15,},
-    {date: '2020-01-02', humidity: 30, temperature: 1, other: 25, },]),
-    createData(4,'Basil', 2, true,[
-    {date: '2020-01-05', humidity: 20, temperature: 15,  other: 15,},
-    {date: '2020-01-02', humidity: 30, temperature: 1, other: 25, },]),
-    createData(5,'Cabagge', 3, true,[
-    {date: '2020-01-05', humidity: 20, temperature: 15,  other: 15,},
-    {date: '2020-01-02', humidity: 30, temperature: 1, other: 25, },]),
-    createData(6,'Cabagge', 3, true,[
-    {date: '2020-01-05', humidity: 20, temperature: 15,  other: 15,},
-    {date: '2020-01-02', humidity: 30, temperature: 1, other: 25, },]),
-  ]
-
-function createData(id, name, patch, finished, history) {
-  return {
-    id,
-    name,
-    patch,
-    finished,
-    history,
-  };
-}
 
 function Row(props) {
   const { row } = props;
   const [open, setOpen] = React.useState(false);
-
   return (
     <React.Fragment>
       <TableRow style ={ row.id % 2? { background : "white" }:{ background : "#FCEED8" }} >
@@ -73,10 +42,10 @@ function Row(props) {
           </IconButton>
         </TableCell>
         <TableCell align="left"> {row.id}</TableCell>
-        <TableCell align="left">{row.name}</TableCell>
-        <TableCell align="left">{row.patch}</TableCell>
+        <TableCell align="left">{row.plant.name}</TableCell>
+        <TableCell align="left">{row.growPatch}</TableCell>
         <TableCell align="right"> {row.finished ? 
-                    (  <CheckBoxIcon/>) : (<CheckBoxOutlineBlankIcon/>)}
+         (  <CheckBoxIcon/>) : (<CheckBoxOutlineBlankIcon/>)}
         </TableCell>
       </TableRow>
 
@@ -97,12 +66,12 @@ function Row(props) {
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  {row.history.map((historyRow) => (
-                    <TableRow key={historyRow.date}>
-                      <TableCell> {historyRow.date}</TableCell>
-                      <TableCell align="right">{historyRow.humidity}</TableCell>
-                      <TableCell align="right">{historyRow.temperature}</TableCell>
-                      <TableCell align="right">{historyRow.other}</TableCell>
+                {row.measurements.map((measurementRow) => (
+                    <TableRow key={measurementRow.date}>
+                      <TableCell> {measurementRow.date}</TableCell>
+                      <TableCell align="right">{measurementRow.humidity}</TableCell>
+                      <TableCell align="right">{measurementRow.temperature}</TableCell>
+                      <TableCell align="right">nic</TableCell>
                     </TableRow>
                   ))}
                 </TableBody>
@@ -179,11 +148,13 @@ function TablePaginationActions(props) {
     rowsPerPage: PropTypes.number.isRequired,
   };
 
-export default function CollapsibleTable() {
+const CollapsibleTable = (props) => {
 
+    const [rowNumber, setRowNumber] = React.useState(0);
+    const {cultivations} = props;
     const [page, setPage] = React.useState(0);
     const [rowsPerPage, setRowsPerPage] = React.useState(5);
-    const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rows.length) : 0;
+    const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - cultivations.length) : 0;
   
     const handleChangePage = (event, newPage) => {
       setPage(newPage);
@@ -194,6 +165,11 @@ export default function CollapsibleTable() {
       setPage(0);
     };
 
+    function getAndSetRowNumber(rowNumber){
+      var previousRowNumber = rowNumber;
+      setRowNumber(previousRowNumber+1)
+      return previousRowNumber;
+    }
 
 
   return (
@@ -211,9 +187,9 @@ export default function CollapsibleTable() {
           </TableRow>
         </TableHead>
         <TableBody >  
-          {(rowsPerPage > 0  ? rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage) : rows)
-          .map((row) => (
-            <Row key={row.id} row={row}/>
+          {(rowsPerPage > 0  ? cultivations.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage) : cultivations)
+          .map((cultivation) => (
+            <Row key={cultivation.id} row={cultivation}/>
           ))}
         </TableBody>
         <TableFooter sx={{ backgroundColor: "#F8D090"}}>
@@ -221,7 +197,7 @@ export default function CollapsibleTable() {
             <TablePagination
               rowsPerPageOptions={[5, 10, 25, { label: 'All', value: -1 }]}
               colSpan={6}
-              count={rows.length}
+              count={cultivations.length}
               rowsPerPage={rowsPerPage}
               page={page}
               onPageChange={handleChangePage}
@@ -235,3 +211,4 @@ export default function CollapsibleTable() {
     </Container>
   );
 }
+export default CollapsibleTable
