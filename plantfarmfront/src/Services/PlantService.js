@@ -8,8 +8,8 @@ class PlantService {
         return axios.get(PLANTS_API_BASE_URL);
     }
 
-    addPlant(plant){
-        return axios.post(PLANTS_API_BASE_URL, plant);
+    addPlant(formData){
+        return axios.post(PLANTS_API_BASE_URL, formData);
     }
 
     getPlantById(plantId){

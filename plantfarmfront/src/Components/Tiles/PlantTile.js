@@ -22,6 +22,8 @@ import sun from './plant.png';
     const PlantTile = (props) =>{
         let location = useLocation();
         const {plants, visibility} = props;
+        const path = 'http://localhost:8080/api/plants/';
+
 
     return (
             <Container maxWidth="md" component="main" >
@@ -32,8 +34,8 @@ import sun from './plant.png';
                   <Card >
                     <CardHeader title={plant.name} subheader={plant.type} titleTypographyProps={{ align: 'center' }} subheaderTypographyProps={{ align: 'center', }} sx={{ backgroundColor: "#A9C47F"}} />
                     <CardContent sx={{ backgroundColor: "#edeec9"}}>
-                      <Grid sx={{ pt: 1, pb: 2 , ml:5 , mr:5 }}>
-                      <CardMedia  image={sun}  sx={{ Color: "#edeec9", backgroundColor: "#edeec9"}} style={{ height:70 , width : 85}} />
+                      <Grid sx={{ pt: 1, pb: 2 , ml:5 , mr:5 }} style={{display:'flex', justifyContent:'center', alignItems:'center'}} >
+                      {plant.id ? <img src = {path.concat(plant.id,"/download")}  style={{ height: '180px' , width: '180px'}} />  : null}
                       </Grid>
                       <Typography component="li" variant="subtitle1" align="center" > Humidity: {plant.humidity} %</Typography>
                       <Typography component="li" variant="subtitle1" align="center" > Temperature: {plant.temperature}°C</Typography>

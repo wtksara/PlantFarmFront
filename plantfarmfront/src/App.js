@@ -35,9 +35,9 @@ function Paths() {
       <Route path ="/" exact component ={MainPage}/>
       </Switch>
 
+      {background && <Route path="/plants/add/" children={<AddDialog/>} />}
       {background && <Route path="/plants/edit/:id" children={<EditDialog/>} />}
       {background && <Route path="/plants/delete/:id" children={<DeleteDialog/>} />}
-      {background && <Route path="/plants/add/" children={<AddDialog/>} />}
       {background && <Route path="/management/patches/delete/:id" children={<EndDialog/>} />}
       {background && <Route path="/management/patches/:patchid/plants/:plantid" children={<SelectDialog/>} />}
       {background && <Route path="/management/patches/none" children={<NoneDialog/>} />}

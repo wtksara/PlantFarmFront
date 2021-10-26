@@ -1,4 +1,4 @@
-import  {useState} from 'react';
+import  React, {useCallback, useState} from 'react';
 import {makeStyles}  from '@material-ui/core/styles';
 import Grid from '@mui/material/Grid';
 import Button from '@mui/material/Button';
@@ -13,6 +13,9 @@ import { useHistory } from "react-router-dom";
 import PlantService from '../../Services/PlantService'
 import { useEffect } from 'react';
 import {withRouter} from 'react-router-dom';
+import {useDropzone} from 'react-dropzone'
+import AddPhotoAlternateIcon from "@material-ui/icons/AddPhotoAlternate";
+import IconButton from '@mui/material/IconButton';
 
 const useStyle = makeStyles(theme => ({
     root: {
@@ -53,19 +56,23 @@ const initial = {
  const PlantForm = (props) =>  {
 
     const { id } = props.match.params;
+    const [ file, setFile] = useState();
     const [ values, setValues] = useState(initial);
     const [ errors, setErrors] = useState({});
+    const { plant, setPlant} = useState(0);
+
     let history = useHistory();
 
     const classes  = useStyle();
     const button  = buttonStyle();
 
-      useEffect(() => {
+    useEffect(() => {
+        if(id!= null){
         PlantService.getPlantById(id).then((res) => {
             setValues(res.data);
         }
-        )
-      }, []);
+        )}
+ }, []);
    
 
     const handleInputChange = x => {
@@ -77,15 +84,30 @@ const initial = {
         
     }
   
+
     const handleSubmit = x => {
+        
         x.preventDefault()
         if (validate()) {
-        let plant= {name: values.name, type: values.type, photo : "", humidity: values.humidity, temperature: values.temperature, amountOfDays: values.amountOfDays };
-        PlantService.addPlant(plant).then(res => { 
-            history.push('/plants');
-            window.location.reload();
-        })
-        }
+            
+        // Update photo
+        const formData = new FormData();
+        formData.append("file",file);
+        formData.append('plant', new Blob([JSON.stringify({
+            "name": values.name,
+            "type": values.type,
+            "humidity": values.humidity,
+            "temperature": values.temperature,
+            "amountOfDays": values.amountOfDays 
+        })], {
+            type: "application/json"
+        }));
+  
+        PlantService.addPlant(formData).then(res => { 
+                history.push('/plants');
+                 window.location.reload();
+         })
+    }
     }
 
     const handleEdit = x => {
@@ -96,6 +118,7 @@ const initial = {
             history.push('/plants');
             window.location.reload();
         })
+
 
     }
     }
@@ -112,7 +135,26 @@ const initial = {
         
         return Object.values(formErrors).every(x => x == "")
     }
-
+    
+    function Dropzone() {
+      const onDrop = useCallback(acceptedFiles => {
+        setFile(acceptedFiles[0]);
+      }, [])
+      const {getRootProps, getInputProps, isDragActive} = useDropzone({onDrop})
+    
+      return (
+        <div {...getRootProps()}>
+          <input {...getInputProps()} />
+          {
+            isDragActive ?
+              <p>Drop the files here ...</p> :
+              <IconButton aria-label="Drag files here">
+              <AddPhotoAlternateIcon fontSize="large" />
+              </IconButton>
+          }
+        </div>
+      )
+    }
     return (
             <form className = {classes.root} autoComplete="off">
 
@@ -152,8 +194,10 @@ const initial = {
                     />
                   
                 </Grid>
-                <Grid  item xs={6} sx={{ pt: 1 }}>
-                <Image src='../Images/cucumber.png' color="white"/>  
+                <Grid  item xs={6} sx={{ pt: 1 }} style={{display:'flex', justifyContent:'center', alignItems:'center'}}>
+                {id ==null ? 
+                  (<Dropzone />) :  (
+                <Image src='../Images/cucumber.png' color="white"/>  )}
                 </Grid>
                     <Grid item xs={12} sx={{ pb:4 }}>
                     <FormControl >
