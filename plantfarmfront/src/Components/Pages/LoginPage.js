@@ -1,4 +1,3 @@
-import * as React from 'react';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -8,22 +7,69 @@ import Checkbox from '@mui/material/Checkbox';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
+import LoginService from '../../Services/LoginService'
 import { createTheme, ThemeProvider } from '@mui/material/styles';
+import  React, {useCallback, useState} from 'react';
+import { authenticate, authFailure, authSuccess } from '../../Auth/authActions';
+import { connect } from 'react-redux';
 
 import Footer from '../Footer';
 
 const theme = createTheme();
 
-export default function SignIn() {
+const LoginPage=({loading,error,...props})=>{
+
+  const [ errors, setErrors] = useState({});
+  const [ values, setValues] = useState({
+    username : '',
+    password : ''
+  });
+
   const handleSubmit = (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    // eslint-disable-next-line no-console
-    console.log({
-      email: data.get('email'),
-      password: data.get('password'),
+    console.log(values);
+   
+      props.authenticate();
+    
+      LoginService.loginIn(values).then((response)=>{
+
+        if(response.status===200){
+            props.setUser(response.data);
+            props.history.push('/plants');
+            window.location.reload();
+        }
+        else {
+           props.loginFailure('Something Wrong!Please Try Again'); 
+        }
+
+      }).catch((err)=>{
+
+        if(err && err.response){
+        
+        switch(err.response.status){
+            case 401:
+                console.log("401 status");
+                props.loginFailure("Authentication Failed.Bad Credentials");
+                break;
+            default:
+                props.loginFailure('Something Wrong!Please Try Again'); 
+        }
+        }
+        else{
+            props.loginFailure('Something Wrong!Please Try Again');
+        }
     });
   };
+
+
+  const handleChange = (e) => {
+    e.persist();
+    setValues(values => ({
+    ...values,
+    [e.target.name]: e.target.value
+    }));
+};
 
   return (
     <ThemeProvider theme={theme}>
@@ -49,23 +95,25 @@ export default function SignIn() {
               fullWidth
               id="email"
               label="Email Address"
-              name="email"
-              autoComplete="email"
+              value={values.username} 
+              onChange={handleChange} 
+              name="username"
+              autoComplete="username"
               autoFocus
+              {...(errors.username && {error:true, helperText:errors.username})}
             />
             <TextField
               margin="normal"
               required
               fullWidth
+              value={values.password} 
+              onChange={handleChange} 
               name="password"
               label="Password"
               type="password"
               id="password"
               autoComplete="current-password"
-            />
-            <FormControlLabel
-              control={<Checkbox value="remember" color="primary" />}
-              label="Remember me"
+              {...(errors.password && {error:true, helperText:errors.password})}
             />
             <Button
               type="submit"
@@ -83,3 +131,22 @@ export default function SignIn() {
     </ThemeProvider>
   );
 }
+
+const mapStateToProps=({auth})=>{
+  console.log("state ",auth)
+  return {
+      loading:auth.loading,
+      error:auth.error
+}}
+
+
+const mapDispatchToProps=(dispatch)=>{
+
+  return {
+      authenticate :()=> dispatch(authenticate()),
+      setUser:(data)=> dispatch(authSuccess(data)),
+      loginFailure:(message)=>dispatch(authFailure(message))
+  }
+}
+
+export default connect(mapStateToProps,mapDispatchToProps)(LoginPage);

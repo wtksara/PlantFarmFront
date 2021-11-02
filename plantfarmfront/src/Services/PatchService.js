@@ -9,15 +9,24 @@ class PatchService {
     }
     
     getPatchById(patchId){
-        return axios.get(PATCHS_API_BASE_URL + '/' + patchId);
+        return axios.get(PATCHS_API_BASE_URL + '/' + patchId, {
+            headers: {
+                'Authorization':'Bearer '+ localStorage.getItem('USER_KEY')
+            }});
     }
 
     updatePatch(patchId, plantId){
-        return axios.put(PATCHS_API_BASE_URL + '/' + patchId + '/plant/' + plantId);
+        return axios.put(PATCHS_API_BASE_URL + '/' + patchId + '/plant/' + plantId, {
+            headers: {
+                'Authorization':'Bearer '+ localStorage.getItem('USER_KEY')
+            }});
     }
 
     endPatch(patchId){
-        return axios.put(PATCHS_API_BASE_URL + '/' + patchId);
+        return axios.put(PATCHS_API_BASE_URL + '/' + patchId,{
+            headers: {
+                'Authorization':'Bearer '+ localStorage.getItem('USER_KEY')
+            }});
     }
 }
 export default new PatchService()

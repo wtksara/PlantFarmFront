@@ -13,6 +13,7 @@ import Topic from '../Topic';
 import PlantService from '../../Services/PlantService'
 import { Link } from "react-router-dom";
 import {withRouter} from 'react-router-dom';
+import history from '../../history';
 
 class PlantsPage extends React.Component {
 
@@ -20,25 +21,38 @@ class PlantsPage extends React.Component {
           super(props)
           this.state = {
               plants: [] ,
-              openForm: false
+              openForm: false,
+              showContent : localStorage.getItem('USER_KEY'),
           }
       }
      
       componentDidMount(){
+      if (this.state.showContent != null) {
         PlantService.getPlants().then((response) => {
             this.setState({plants: response.data});
         });
+      }
+      else { 
+        history.push('/login');
+        window.location.reload();
+        }
     }
-
 
     closeForm = () => { this.setState({ openForm: false });}
 
       render() {
+    
+        let show = this.state.showContent
         return(
             <React.Fragment>
+              { show != null ? (
               <Topic title = "Collection of your plants" text = "Set the breeding requirements of your plants and adjust them to your garden on an ongoing basis."/>
+              ):
+              (<div/> ) }
               <Container disableGutters maxWidth="xs" component="main" sx={{  pb: 4 }}>
+              
               <Grid alignItems="flex-end">
+              { show != null ? (
               <Button 
                       variant="outlined" 
                       variant="contained" 
@@ -50,9 +64,18 @@ class PlantsPage extends React.Component {
                       component={Link}  
                       to={{ pathname: `/plants/add/`,state: { background: this.props.location } }}>
                       <AddIcon/>Add new plant</Button> 
+              ):
+              (<div/> )
+                }
               </Grid>
+              
               </Container>
+              
+            { show != null ? (
             <PlantTile plants={this.state.plants} visibility = {true}/>
+            ):
+            (<div/> ) 
+            }
             <Footer/>
             </React.Fragment>
         )

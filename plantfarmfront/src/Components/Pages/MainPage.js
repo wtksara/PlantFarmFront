@@ -39,8 +39,8 @@ class MainPage extends React.Component{
       this.setState({tank: response.data});
       });
       CultivationService.getAllCultivations().then((response) => {
-        this.setState({cultivations: response.data});
-        });
+      this.setState({cultivations: response.data});
+      });
     }
     
 

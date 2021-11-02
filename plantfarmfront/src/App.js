@@ -14,6 +14,7 @@ import AddDialog from './Components/Dialogs/AddDialog'
 import EndDialog from './Components/Dialogs/EndDialog'
 import NoneDialog from './Components/Dialogs/NoneDialog'
 import SelectDialog from './Components/Dialogs/SelectDialog'
+import history from './history';
 
 import{ BrowserRouter as Router,
         Switch,
@@ -27,6 +28,7 @@ function Paths() {
 
   return (
     <div>
+   
       <Switch location={background || location}>
       <Route path ="/plants" exact component ={PlantsPage}/>
       <Route path ="/management" exact component ={ManagementPage}/>
@@ -41,6 +43,7 @@ function Paths() {
       {background && <Route path="/management/patches/delete/:id" children={<EndDialog/>} />}
       {background && <Route path="/management/patches/:patchid/plants/:plantid" children={<SelectDialog/>} />}
       {background && <Route path="/management/patches/none" children={<NoneDialog/>} />}
+ 
     </div>
   );
 }
