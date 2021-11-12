@@ -66,15 +66,19 @@ const PatchTile = (props) =>{
 
     function setMarks(patch){
       
+      var amount;
+      if (patch.actualAmountOfDays > patch.amountOfDays) { amount =patch.actualAmountOfDays;}
+      else {  amount = patch.amountOfDays }
       var marks= [ 
           { value: 0, label: "0",},
-          { value: parseInt(patch.amountOfDays*0.25), label: (parseInt(patch.amountOfDays*0.25)).toString(),},
-          { value: parseInt(patch.amountOfDays*0.50), label: (parseInt(patch.amountOfDays*0.50)).toString(),},
-          { value: parseInt(patch.amountOfDays*0.75), label: (parseInt(patch.amountOfDays*0.75)).toString(),},
-          { value: patch.amountOfDays, label: (parseInt(patch.amountOfDays)*1).toString(),},
+          { value: parseInt(amount*0.25), label: (parseInt(amount*0.25)).toString(),},
+          { value: parseInt(amount*0.50), label: (parseInt(amount*0.50)).toString(),},
+          { value: parseInt(amount*0.75), label: (parseInt(amount*0.75)).toString(),},
+          { value: parseInt(amount), label: (parseInt(amount)).toString(),},
         ]
       return marks
     }
+
 
     const CustomSlider = withStyles({
       thumb: { backgroundColor: "#A9C47F",},
@@ -83,7 +87,18 @@ const PatchTile = (props) =>{
       rail: { color: "#001d3d"}
     })(Slider);
     
-  
+    const CustomSliderAbove = withStyles({
+      thumb: { backgroundColor: "#A9C47F",},
+      active: { backgroundColor: "#FF0000 !important",},
+      track: { backgroundColor: "#606c38 !important",
+                border: "2px solid black",
+              borderColor: "#606c38"
+      },
+      rail: { color: "#A9C47F",
+            border: "2px solid black",
+            borderColor: "#A9C47F"
+    }
+    })(Slider);
 
 
     function alertColor(patch){
@@ -236,37 +251,56 @@ const PatchTile = (props) =>{
          </Toolbar>
          </AppBar>
         <CardContent sx={{ backgroundColor: "#ffffff"}}>
-            <Grid container spacing = {1} alignItems="flex-end">
-              <Grid item>
-                <Typography variant="h2" align="center" >{patch.actualTemperature}°C</Typography>
+            <Grid container spacing = {0.5} alignItems="flex-end">
+              <Grid item xs={9.5}>
+                <Typography variant="h3" align="flex-end" >{patch.actualTemperature}°C</Typography>
+              </Grid>
+              <Grid item xs={2.5}>
+              <CardMedia  image={sun} align="flex-start" sx={{ Color: "#edeec9", backgroundColor: "#edeec9"}}   style={{ height:70 , width : 60,  display: 'flex', justifyContent: 'flex-end' }} />
               </Grid>
               <Grid item>
-              <CardMedia  image={sun}  sx={{ Color: "#edeec9", backgroundColor: "#edeec9"}} style={{ height:70 , width : 85}} />
+                <Typography variant="h6" align="flex-end" > Humidity: {patch.actualHumidity} %</Typography>
               </Grid>
             </Grid>
             <Grid container spacing ={2} sx={{ pb:5 }} alignItems="flex-end">
               <Grid item>
-                <Typography variant="h6" align="center" > Humidity: {patch.actualHumidity} %</Typography>
-              </Grid>
             </Grid>
-            <CustomSlider
+            </Grid>
+            {patch.actualAmountOfDays > patch.amountOfDays  ? 
+            (<CustomSliderAbove
+            track="inverted"
             aria-label="Always visible"
             disabled 
-            defaultValue={patch.actualAmountOfDays}
+            defaultValue={[patch.amountOfDays, patch.actualAmountOfDays]}
             step={5}
             marks={setMarks(patch)}
             max={0}
-            max={patch.amountOfDays}
+            max={ patch.actualAmountOfDays }
             valueLabelDisplay="on"
           />
-          <Grid>
-          <Typography variant="subtitle1" align="center" > Time of growth</Typography>
+            ):
+            (<CustomSlider
+          
+              aria-label="Always visible"
+              disabled 
+              defaultValue={patch.actualAmountOfDays}
+              step={5}
+              marks={setMarks(patch)}
+              max={0}
+              max={patch.amountOfDays }
+              valueLabelDisplay="on"
+            />
+              )
+             
+            }
+           <Grid>
+            <Typography variant="subtitle1" align="center" > {patch.actualAmountOfDays > patch.amountOfDays ? "Time of growth extended" : "Time of growth"} </Typography>
           </Grid>
           </CardContent>
           <CardActions sx={{ backgroundColor: "ffffff"}}>
           <Grid container spacing ={2} alignItems="flex-end">
-          <Grid item xs={4}/>
-          <Grid item xs={8}>
+          <Grid item xs={3}/>
+          <Grid item xs={9}>
           {visibility ? 
           ( 
           <Button 
