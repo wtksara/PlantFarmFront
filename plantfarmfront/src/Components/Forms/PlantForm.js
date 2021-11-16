@@ -7,19 +7,25 @@ import TextField from '@mui/material/TextField';
 import FormControl from '@mui/material/FormControl';
 import FormLabel from '@mui/material/FormLabel';
 import FormControlLabel from '@mui/material/FormControlLabel';
+import Alert from '@mui/material/Alert';
+import Typography from '@mui/material/Typography';
 import Radio from '@mui/material/Radio';
 import Image from 'material-ui-image';
 import { useHistory } from "react-router-dom";
 import PlantService from '../../Services/PlantService'
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 import {withRouter} from 'react-router-dom';
 import {useDropzone} from 'react-dropzone'
 import AddPhotoAlternateIcon from "@material-ui/icons/AddPhotoAlternate";
 import IconButton from '@mui/material/IconButton';
 import Link from '@mui/material/Link';
 import { BoxUpload } from '../../style';
-import FolderIcon from "./picture.png";
+import { ImagePreview} from '../../style';
+import FolderIcon from "../../Images/picture.png";
+import CloseIcon from "../../Images/CloseIcon.svg";
 import { typography } from '@mui/system';
+import { useLocation } from "react-router-dom";
+import DialogPage from '../Dialogs/NoneDialog';
 
 const useStyle = makeStyles(theme => ({
     root: {
@@ -60,10 +66,13 @@ const initial = {
  const PlantForm = (props) =>  {
 
     const { id } = props.match.params;
-    const [ file, setFile] = useState();
     const [ values, setValues] = useState(initial);
     const [ errors, setErrors] = useState({});
-    const { plant, setPlant} = useState(0);
+    const [ file, setFile] = useState();
+    const [ image, setImage] = useState('')
+    const [ isUploaded, setIsUploaded] = useState(false)
+    const [ alert, setAlert] = useState('')
+
 
     let history = useHistory();
 
@@ -88,12 +97,10 @@ const initial = {
         
     }
   
-
     const handleSubmit = x => {
         
         x.preventDefault()
         if (validate()) {
-            
         // Update photo
         const formData = new FormData();
         formData.append("file",file);
@@ -111,20 +118,19 @@ const initial = {
                 history.push('/plants');
                  window.location.reload();
          })
-    }
+        }
     }
 
     const handleEdit = x => {
         x.preventDefault()
-        if (validate()) {
+        if (validate() ) {
         let plant= {name: values.name, type: values.type, photo : "", humidity: values.humidity, temperature: values.temperature, amountOfDays: values.amountOfDays };
         PlantService.updatePlant(plant, id).then(res => {
             history.push('/plants');
             window.location.reload();
-        })
-
-
-    }
+        }
+        )
+        }
     }
 
     const validate=() => {
@@ -136,7 +142,9 @@ const initial = {
         setErrors({
             ...formErrors
         })
-        
+        if (!isUploaded) setAlert("Image is required")
+        else setAlert("")
+
         return Object.values(formErrors).every(x => x == "")
     }
     
@@ -161,9 +169,20 @@ const initial = {
     }
 
 
+    function handleImageChange(e) {
+        if (e.target.files && e.target.files[0]){
+            let reader = new FileReader()
+            reader.onload = function(e){
+                setImage(e.target.result)
+                setIsUploaded(true)
+            }
+            reader.readAsDataURL(e.target.files[0])
+            setFile(e.target.files[0])
+        }
+    }
+
     return (
             <form className = {classes.root} autoComplete="off">
-
             <Grid container >
                 <Grid item xs={6}>
                     <TextField
@@ -201,14 +220,46 @@ const initial = {
                   
                 </Grid>
                 <Grid  item xs={6} sx={{ pt: 1 }} style={{display:'flex', justifyContent:'center', alignItems:'center'}}>
+                <Grid container>
+               <Grid item xs={12}>
                 <BoxUpload>
-                <form>
-                <img src={FolderIcon} alt="placeholder" style ={{justifyContent:'center', width:80, height:80}}/>
-               <p>
-                <button>Add a image</button></p>
-                <input type="file" style ={{display:"none"}}></input>
-                </form>
+                <div className="image-upload">
+                    {
+                        !isUploaded ? (
+                            <>
+                            <label htmlFor="upload-input">
+                            <img src={FolderIcon} class="center" alt="placeholder" style ={{ width:100, height:100}}/>
+                            <p style={{color:'#444'}}>Upload image</p>
+                            </label>
+                            <input id="upload-input" type="file" accept=".jpg,.jpeg,.gif,.png,.mov,.mp4"
+                              onChange={handleImageChange}
+                              
+                              ></input>
+                            </>
+                        ) : (
+                            <ImagePreview>
+                            <img 
+                            className="close-icon" 
+                            src={CloseIcon} 
+                            alt="CloseIcon"
+                            onClick={() => { 
+                                setIsUploaded(false)
+                                setImage(null)
+                                setFile(null)}}/>
+                            <img
+                                id="uploaded-image"
+                                src={image}
+                                draggable={false}
+                                alt="uploaded-img"
+                                />
+                            </ImagePreview>
+                        ) 
+                    }
+                </div>
               </BoxUpload>
+              <Typography style={{display:'flex', justifyContent:'center', alignItems:'center', color:'#d00000'}} sx={{ pt: 1, pb:0 }} >{alert}</Typography>    
+              </Grid>
+              </Grid>
                 </Grid>
                     <Grid item xs={12} sx={{ pb:4 }}>
                     <FormControl >
@@ -221,7 +272,8 @@ const initial = {
                         <FormControlLabel value ={type.id} control = {<Radio/>} label ={type.title}/>
                     ))}
                     </RadioGroup>
-                    </FormControl>      
+                    </FormControl>  
+                    
                 </Grid>
                 <Grid classes={{root:button.root}} item xs={12}> 
                 {id ==null ? 

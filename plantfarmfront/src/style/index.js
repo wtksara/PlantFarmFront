@@ -31,19 +31,19 @@ export const ImagePreview = styled.div`
     position: relative;
     /* cursor: pointer; */
     #uploaded-image{
-        height: 350px;
-        width: 350px;
+        height: 270px;
+        width: 270px;
         object-fit: cover;
         border-radius: 20px;
     }
     .close-icon{
-        background: #000;
+        background: #A9C47F;
         border-radius: 5px;
         opacity: .8;
         position: absolute;
         z-index: 10;
         right: 15px;
-        top: 20px;
+        top: 15px;
         cursor: pointer;
         :hover {
             opacity: 1;

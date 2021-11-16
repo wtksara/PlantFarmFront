@@ -8,8 +8,6 @@ const ProtectedRoute = ({ component: Component, ...rest }) => {
   const checkValidToken = () => {
     if (localStorage.getItem("USER_KEY")) {
         const jwt_Token_decoded = Jwt_Decode(localStorage.getItem("USER_KEY"));
-        console.log(jwt_Token_decoded.exp * 1000);
-        console.log(Date.now());
         if (jwt_Token_decoded.exp * 1000 < Date.now()) {
           localStorage.clear();
           history.push('/login');

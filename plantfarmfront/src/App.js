@@ -48,6 +48,7 @@ function Paths() {
       {background && <ProtectedRoute path="/management/patches/:patchid/plants/:plantid" children={<SelectDialog/>} />}
       {background && <ProtectedRoute path="/management/patches/none" children={<NoneDialog/>} />}
       {background && <ProtectedRoute path="/login/failed" children={<NoneDialog/>} />}
+      {background && <ProtectedRoute path="/plants/add/failed" children={<NoneDialog/>} />}
     </div>
   
   );
