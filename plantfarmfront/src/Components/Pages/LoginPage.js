@@ -12,14 +12,15 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 import  React, {useCallback, useState} from 'react';
 import { authenticate, authFailure, authSuccess } from '../../Auth/authActions';
 import { connect } from 'react-redux';
-
+import DialogPage from '../Dialogs/DialogPage';
 import Footer from '../Footer';
+import { useLocation } from "react-router-dom";
 
 const theme = createTheme();
 
 const LoginPage=({loading,error,...props})=>{
 
-  const [ errors, setErrors] = useState({});
+  let location = useLocation();
   const [ values, setValues] = useState({
     username : '',
     password : ''
@@ -28,7 +29,6 @@ const LoginPage=({loading,error,...props})=>{
   const handleSubmit = (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    console.log(values);
    
       props.authenticate();
     
@@ -36,27 +36,37 @@ const LoginPage=({loading,error,...props})=>{
 
         if(response.status===200){
             props.setUser(response.data);
-            props.history.push('/plants');
+            props.history.push('/');
             window.location.reload();
         }
-        else {
-           props.loginFailure('Something Wrong!Please Try Again'); 
-        }
-
+    
       }).catch((err)=>{
 
         if(err && err.response){
         
         switch(err.response.status){
             case 401:
+                props.history.push({ pathname:'/login/failed', 
+                state:  {background: location , 
+                  title: "Authentication Failed", 
+                  topic: " Authentication has failed, propably bad credentials. Please try again."}});
                 console.log("401 status");
                 props.loginFailure("Authentication Failed.Bad Credentials");
                 break;
             default:
+              props.history.push({ pathname:'/login/failed', 
+              state:  {background: location , 
+                title: "Error", 
+                topic: " Something Wrong! Please Try Again"}});
                 props.loginFailure('Something Wrong!Please Try Again'); 
         }
         }
         else{
+            props.history.push({ pathname:'/login/failed', 
+              state:  {background: location , 
+                title: "Error", 
+                topic: " Something Wrong! Please Try Again"}});
+                props.loginFailure('Something Wrong!Please Try Again'); 
             props.loginFailure('Something Wrong!Please Try Again');
         }
     });
@@ -94,13 +104,12 @@ const LoginPage=({loading,error,...props})=>{
               required
               fullWidth
               id="email"
-              label="Email Address"
+              label="Username"
               value={values.username} 
               onChange={handleChange} 
               name="username"
               autoComplete="username"
               autoFocus
-              {...(errors.username && {error:true, helperText:errors.username})}
             />
             <TextField
               margin="normal"
@@ -113,7 +122,6 @@ const LoginPage=({loading,error,...props})=>{
               type="password"
               id="password"
               autoComplete="current-password"
-              {...(errors.password && {error:true, helperText:errors.password})}
             />
             <Button
               type="submit"

@@ -23,7 +23,19 @@ const EndDialog = (props) => {
   const [ values, setValues] = useState(initial);
 
   let history = useHistory();
-  const topic = "It has left " + (amount - values.amountOfDays) +  " days to end cultivation" ;
+  let timeOfGrowth = amount - values.amountOfDays;
+
+  function topicTitle(){
+  if (timeOfGrowth >0){
+    return "It has left " + timeOfGrowth +  " days to end cultivation" ;
+  }
+  else if (timeOfGrowth == 0) {
+    return "It is end of cultivation" ;
+  }
+  else {
+    return "Cultivation time has been extended by " + Math.abs(timeOfGrowth) + " days";
+  }
+  }
 
   useEffect(() => {
     PatchService.getPatchById(id).then((res) => {
@@ -46,7 +58,7 @@ const EndDialog = (props) => {
       <React.Fragment>
       <DialogPage 
         title = "Are you sure you want to end cultivation ?" 
-        topic = {topic}> 
+        topic = {topicTitle()}> 
         <DialogActions>
           <Button 
           autoFocus 

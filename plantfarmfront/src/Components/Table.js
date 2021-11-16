@@ -29,11 +29,12 @@ import CheckBoxIcon from '@mui/icons-material/CheckBox';
 
 
 function Row(props) {
-  const { row } = props;
+  const {row, number } = props;
   const [open, setOpen] = React.useState(false);
+
   return (
     <React.Fragment>
-      <TableRow style ={ row.id % 2? { background : "white" }:{ background : "#FCEED8" }} >
+      <TableRow style ={ number % 2? { background : "white" }:{ background : "#FCEED8" }} >
         <TableCell>
           <IconButton
             size="small"
@@ -62,7 +63,7 @@ function Row(props) {
                     <TableCell align="left">Date</TableCell>
                     <TableCell align="right">Humidity [%]</TableCell>
                     <TableCell align="right">Temperature [°C]</TableCell>
-                    <TableCell align="right">Temperature [°C]</TableCell>
+                    <TableCell align="right">Insolation [%]</TableCell>
                   </TableRow>
                 </TableHead>
                 <TableBody>
@@ -71,7 +72,7 @@ function Row(props) {
                       <TableCell> {measurementRow.date}</TableCell>
                       <TableCell align="right">{measurementRow.humidity}</TableCell>
                       <TableCell align="right">{measurementRow.temperature}</TableCell>
-                      <TableCell align="right">nic</TableCell>
+                      <TableCell align="right">{measurementRow.insolation}</TableCell>
                     </TableRow>
                   ))}
                 </TableBody>
@@ -84,21 +85,6 @@ function Row(props) {
   );
 }
 
-Row.propTypes = {
-  row: PropTypes.shape({
-    id: PropTypes.number.isRequired,
-    name: PropTypes.string.isRequired,
-    patch: PropTypes.number.isRequired,
-    history: PropTypes.arrayOf(
-      PropTypes.shape({
-        date: PropTypes.string.isRequired,
-        humidity: PropTypes.number.isRequired,
-        temperature: PropTypes.number.isRequired,
-        other:PropTypes.number.isRequired,
-      }),
-    ).isRequired,
-  }).isRequired,
-};
 
 function TablePaginationActions(props) {
     const theme = useTheme();
@@ -188,8 +174,8 @@ const CollapsibleTable = (props) => {
         </TableHead>
         <TableBody >  
           {(rowsPerPage > 0  ? cultivations.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage) : cultivations)
-          .map((cultivation) => (
-            <Row key={cultivation.id} row={cultivation}/>
+          .map((cultivation,i) => (
+            <Row key={cultivation.id} row={cultivation} number={i}/>
           ))}
         </TableBody>
         <TableFooter sx={{ backgroundColor: "#F8D090"}}>

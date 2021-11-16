@@ -29,8 +29,8 @@ import sun from './plant.png';
             <Container maxWidth="md" component="main" >
             <Grid container spacing={5} alignItems="flex-end">
 
-              {plants.map((plant) => (
-                <Grid item key={plant.id} xs={12} sm={6} md={4} >
+              {plants.map((plant, id) => (
+                <Grid item key={id} xs={12} sm={6} md={4} >
                   <Card >
                     <CardHeader title={plant.name} subheader={plant.type} titleTypographyProps={{ align: 'center' }} subheaderTypographyProps={{ align: 'center', }} sx={{ backgroundColor: "#A9C47F"}} />
                     <CardContent sx={{ backgroundColor: "#edeec9"}}>
@@ -54,7 +54,6 @@ import sun from './plant.png';
                       fullWidth  
                       size="medium"  
                       component={Link} 
-                      key={plant.id} 
                       to={{ pathname: `/plants/edit/${plant.id}`,state: { background: location } }}>
                       Edit</Button>                 
                     <Button 
@@ -65,7 +64,6 @@ import sun from './plant.png';
                       fullWidth  
                       size="medium" 
                       component={Link} 
-                      key={plant.id} 
                       to={{ pathname: `/plants/delete/${plant.id}`,state: { background: location } }}>
                       Delete</Button>
                       </React.Fragment>

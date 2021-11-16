@@ -8,7 +8,8 @@ import PropTypes from 'prop-types';
 import Box from '@mui/material/Box';
 import CssBaseline from '@mui/material/CssBaseline';
 import Container from '@mui/material/Container';
-
+import { useHistory } from "react-router-dom";
+import jwtDecode from "jwt-decode";
 
 const sections = [
   { title: 'Plants', url: 'plants' },
@@ -17,6 +18,16 @@ const sections = [
 ];
 
 function NavigationBar() {
+
+  let history = useHistory();
+  let showContent = localStorage.getItem('USER_KEY');
+
+  const handleLogout = x => {
+    localStorage.removeItem("USER_KEY");
+    history.push('/login');
+    window.location.reload();
+    
+  }
 
   return (
     <React.Fragment>
@@ -30,7 +41,12 @@ function NavigationBar() {
       <Link underline="none" color="text.primary" noWrap  key={section.title} variant="button" href={section.url} sx={{ p: 1, flexShrink: 0 }}>{section.title}</Link>
        ))}
        <Box sx={{ flexGrow: 1 }}/>
-      <Button color = 'inherit' sx={{ alignItems: 'flex-end' , backgroundColor: "#A9C47F"}} variant="outlined" size="medium" component={LinkRouter} to={'/login'}> Login </Button>
+       {showContent == null ? 
+       (<Button color = 'inherit' sx={{ alignItems: 'flex-end' , backgroundColor: "#A9C47F"}} variant="outlined" size="medium" component={LinkRouter} to={'/login'}> Login </Button>)
+       :
+       (<Button color = 'inherit' sx={{ alignItems: 'flex-end' , backgroundColor: "#A9C47F"}} variant="outlined" size="medium" onClick ={() => handleLogout()} > Log out </Button>)
+       }
+      
       </Toolbar>
       </AppBar>
       <AppBar

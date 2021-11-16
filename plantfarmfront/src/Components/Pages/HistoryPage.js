@@ -17,20 +17,14 @@ class HistoryPage extends React.Component {
 
   this.state = {
     cultivations: [],
-    showContent : localStorage.getItem('USER_KEY'),
   }
   } 
 
   componentDidMount(){
-    if (this.state.showContent != null) {
     CultivationService.getAllCultivations().then((response) => {
     this.setState({cultivations: response.data});
     });
-    }
-    else { 
-     history.push('/login');
-     window.location.reload();
-    }
+  
   }
 
   logOut=()=>{
@@ -40,21 +34,16 @@ class HistoryPage extends React.Component {
   }
 
   render() {
-    let show = this.state.showContent
     return (
     <React.Fragment>
     <GlobalStyles styles={{ ul: { margin: 0, padding: 0, listStyle: 'none' } }} />
     <CssBaseline/>
-    { show != null ? (
+    <React.Fragment>
     <Topic 
       title = "History" 
       text = "Check the history of measurements made during plant growth and, based on them, choose the best growing conditions for the plants to ensure the best quality."/>
-      ):
-      (<div/> )}
-    { show != null ? (
     <Table cultivations = {this.state.cultivations}/>
-    ):
-    (<div/> )}
+    </React.Fragment> 
     <Footer/>
     </React.Fragment>
     );

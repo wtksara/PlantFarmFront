@@ -121,11 +121,16 @@ const PatchTile = (props) =>{
          else 
            return  "#e85d04" 
       }
+      else if (temperatureDifference < -5) { 
+         return  "#0096c7" 
+      }
       else {
         if (humidityDifference > 10 )
           return  "#d00000" 
         else if (humidityDifference > 5)
           return  "#A9C47F" 
+        else if (humidityDifference < -5)
+          return  "#0096c7"
         else
           return  "#A9C47F" 
       }
@@ -141,28 +146,45 @@ const PatchTile = (props) =>{
   
       if (temperatureDifference > 10 ) {
           if (humidityDifference > 10 )
-            return <CreateAlert color = "#d00000" type = "error"  text= "Temperature and humidity are definitely to high !"/>
+            return <CreateAlert color = "#d00000" type = "error"  text= "Temperature and humidity are definitely too high !"/>
           else if (humidityDifference > 5)
-            return <CreateAlert color = "#d00000" type = "error"  text= "Temperature is to high ! Humidity is above the average. "/>
+            return <CreateAlert color = "#d00000" type = "error"  text= "Temperature is too high ! Humidity is above the average. "/>
+          else if (humidityDifference > -5)
+            return <CreateAlert color = "#d00000" type = "error"  text= "Temperature is too high ! Humidity is too low "/>
           else 
-            return <CreateAlert color = "#d00000" type = "error"  text= " Temperature is definitely to high !"/>
+            return <CreateAlert color = "#d00000" type = "error"  text= " Temperature is definitely too high !"/>
       }
       else if (temperatureDifference > 5) { 
           if (humidityDifference > 10 )
-            return <CreateAlert color = "#d00000" type = "error"  text= "Temperature is above average. Humidity is to high!"/>
+            return <CreateAlert color = "#d00000" type = "error"  text= "Temperature is above average. Humidity is too high!"/>
           else if (humidityDifference > 5)
            return <CreateAlert color = "#e85d04" type = "warning"  text= "Temperature and humidity are above the average."/>
+          else if (humidityDifference < -5)
+           return <CreateAlert color = "#e85d04" type = "warning"  text= "Temperature is above average. Humidity is too low "/>
          else 
            return <CreateAlert color = "#e85d04" type = "warning"  text= "Temperature is above the average. "/>
       }
+      else if (temperatureDifference < -5 ) {
+        if (humidityDifference > 10 )
+          return <CreateAlert color = "#0096c7" type = "info"  text= "Temperature is too low. Humidity are definitely too high !"/>
+        else if (humidityDifference > 5)
+          return <CreateAlert color = "#0096c7" type = "info"  text= "Temperature is too low ! Humidity is above the average. "/>
+        else if (humidityDifference < -5)
+          return <CreateAlert color = "#0096c7" type = "info"  text= "Temperature is too low. Humidity is too low "/>
+        else 
+          return <CreateAlert color = "#0096c7" type = "info"  text= " Temperature is too low !"/>
+      }
       else {
         if (humidityDifference > 10 )
-          return <CreateAlert color = "#d00000" type = "error"  text= "Humidity is to definitely high!"/>
+          return <CreateAlert color = "#d00000" type = "error"  text= "Humidity is too definitely high!"/>
         else if (humidityDifference > 5)
           return <CreateAlert color = "#A9C47F" type = "warning"  text= "Humidity is above the average."/>
+        else if (humidityDifference < -5)
+          return <CreateAlert color = "#0096c7" type = "info"  text= "Humidity is too low "/>
         else
           return <Grid sx={{ pb:5}}/>;
       }
+
 
     }
 
@@ -172,15 +194,15 @@ const PatchTile = (props) =>{
       <React.Fragment>
       <Container maxWidth="md" component="main" sx={{ pt: 0, pb: 8 , backgroundColor: "#ffffff" }} >
       <Grid container spacing={2} mt ={0.5} alignItems="flex-end"> 
-      {patches.map((patch) => (
-        <Grid item key={patch.patchId}  xs={12} sm={6} md={4} >
+      {patches.map((patch, id) => (
+        <Grid item key={id}  xs={12} sm={6} md={4} >
       {patch.plantName == null ? 
       (
         <Card sx={{ borderLeft: 4, borderRight:4 ,borderTop: 4, borderBottom: 4, borderColor : "#b08968", borderStyle: 'solid'}}> 
         <AppBar position="static" color="default" elevation={0} sx={{ borderBottom: '1px solid rgba(0, 0, 0, 0.12)' }} >
         <Toolbar sx={{ backgroundColor: "#e6ccb2"}}>
           <Grid container spacing={2} alignItems="center"  >
-            <Grid item xs >
+            <Grid item xs ={12}  >
                <CardHeader title={"Empty patch"} subheader={"Choose the plant"} titleTypographyProps={{ align: 'center' }} subheaderTypographyProps={{ align: 'center', }} />
            </Grid>
            </Grid>
@@ -188,11 +210,11 @@ const PatchTile = (props) =>{
          </AppBar>   
          <CardContent sx={{ backgroundColor: "#ffffff", pt: 12.5}}>
          <Grid container spacing={2} alignItems="center"  >
-         <Grid item xs>
+         <Grid item xs ={12} >
          {visibility ? 
           ( 
          <FormControl fullWidth>
-        <InputLabel id="info-label">Plant</InputLabel>
+        <InputLabel>Plant</InputLabel>
         <Select
           label="Select"
           onChange={(e) => handleChange(patch.patchId, e)}
@@ -204,7 +226,7 @@ const PatchTile = (props) =>{
         </FormControl>
          ) 
          :
-         (<Grid item xs sx={{pt: 7.5}}/>) 
+         (<Grid item xs ={12}  sx={{pt: 7.5}}/>) 
          }  
         </Grid>
         </Grid>
@@ -223,7 +245,6 @@ const PatchTile = (props) =>{
                 fullWidth  
                 size="medium" 
                 component={Link} 
-                key={patch.id} 
                 to={{ pathname: whichPatch(patch.patchId) != 0 ? `/management/patches/${patch.patchId}/plants/${whichPatch(patch.patchId)}` : `/management/patches/none`,
                  state: { background: location , title: "Plant has not been selected for that patch", topic: " You have to select plant to start cultivation"}}} >
                 Select type</Button> 
@@ -244,32 +265,31 @@ const PatchTile = (props) =>{
         <AppBar position="static" color="default" elevation={0} sx={{ borderBottom: '1px solid rgba(0, 0, 0, 0.12)' }} >
         <Toolbar sx={{ backgroundColor: "#edeec9"}}>
           <Grid container spacing={2} alignItems="center">
-            <Grid item xs >
+            <Grid item xs ={12} >
                <CardHeader title={patch.plantName} subheader={patch.plantType} titleTypographyProps={{ align: 'center' }} subheaderTypographyProps={{ align: 'center', }} />
            </Grid>
            </Grid>
          </Toolbar>
          </AppBar>
         <CardContent sx={{ backgroundColor: "#ffffff"}}>
-            <Grid container spacing = {0.5} alignItems="flex-end">
-              <Grid item xs={9.5}>
-                <Typography variant="h3" align="flex-end" >{patch.actualTemperature}°C</Typography>
+            <Grid container spacing = {1} alignItems="flex-end">
+              <Grid item xs={9}>
+                <Typography variant="h3" align="left" >{patch.actualTemperature}°C</Typography>
               </Grid>
-              <Grid item xs={2.5}>
-              <CardMedia  image={sun} align="flex-start" sx={{ Color: "#edeec9", backgroundColor: "#edeec9"}}   style={{ height:70 , width : 60,  display: 'flex', justifyContent: 'flex-end' }} />
+              <Grid item xs={3}>
+              <CardMedia  image={sun} align="right" sx={{ Color: "#edeec9", backgroundColor: "#edeec9"}}   style={{ height:63 , width : 60,  display: 'flex', justifyContent: 'flex-end' }} />
               </Grid>
               <Grid item>
-                <Typography variant="h6" align="flex-end" > Humidity: {patch.actualHumidity} %</Typography>
+                <Typography variant="h6" align="left" > Humidity: {patch.actualHumidity} %</Typography>
               </Grid>
             </Grid>
-            <Grid container spacing ={2} sx={{ pb:5 }} alignItems="flex-end">
+            <Grid container spacing ={2} sx={{ pb:5 }} alignItems="left">
               <Grid item>
             </Grid>
             </Grid>
             {patch.actualAmountOfDays > patch.amountOfDays  ? 
             (<CustomSliderAbove
             track="inverted"
-            aria-label="Always visible"
             disabled 
             defaultValue={[patch.amountOfDays, patch.actualAmountOfDays]}
             step={5}

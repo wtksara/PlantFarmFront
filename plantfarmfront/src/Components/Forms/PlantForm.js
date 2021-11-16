@@ -16,6 +16,10 @@ import {withRouter} from 'react-router-dom';
 import {useDropzone} from 'react-dropzone'
 import AddPhotoAlternateIcon from "@material-ui/icons/AddPhotoAlternate";
 import IconButton from '@mui/material/IconButton';
+import Link from '@mui/material/Link';
+import { BoxUpload } from '../../style';
+import FolderIcon from "./picture.png";
+import { typography } from '@mui/system';
 
 const useStyle = makeStyles(theme => ({
     root: {
@@ -155,6 +159,8 @@ const initial = {
         </div>
       )
     }
+
+
     return (
             <form className = {classes.root} autoComplete="off">
 
@@ -195,9 +201,14 @@ const initial = {
                   
                 </Grid>
                 <Grid  item xs={6} sx={{ pt: 1 }} style={{display:'flex', justifyContent:'center', alignItems:'center'}}>
-                {id ==null ? 
-                  (<Dropzone />) :  (
-                <Image src='../Images/cucumber.png' color="white"/>  )}
+                <BoxUpload>
+                <form>
+                <img src={FolderIcon} alt="placeholder" style ={{justifyContent:'center', width:80, height:80}}/>
+               <p>
+                <button>Add a image</button></p>
+                <input type="file" style ={{display:"none"}}></input>
+                </form>
+              </BoxUpload>
                 </Grid>
                     <Grid item xs={12} sx={{ pb:4 }}>
                     <FormControl >
@@ -220,6 +231,9 @@ const initial = {
                 }
                 </Grid>
               </Grid>
+              <div>Icons made by 
+                  <Link style={{ color: '#000000' }} to="https://www.freepik.com" title="Freepik"> Freepik </Link> 
+                  from <Link style={{ color: '#000000' }} to="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</Link> </div>
             </form>
     
     )

@@ -1,5 +1,4 @@
 
-import * as React from 'react';
 import Box from '@mui/material/Box';
 
 import PlantsPage from './Components/Pages/PlantsPage';
@@ -14,37 +13,43 @@ import AddDialog from './Components/Dialogs/AddDialog'
 import EndDialog from './Components/Dialogs/EndDialog'
 import NoneDialog from './Components/Dialogs/NoneDialog'
 import SelectDialog from './Components/Dialogs/SelectDialog'
+import ProtectedRoute from './ProtectedRoute'
 import history from './history';
-
 import{ BrowserRouter as Router,
         Switch,
         Route,
-        useLocation } 
-        from "react-router-dom";
+        useLocation,
+        Redirect } from 'react-router-dom'; 
+
+
+
 
 function Paths() {
   let location = useLocation();
   let background = location.state && location.state.background;
 
+
   return (
-    <div>
    
+    <div>
       <Switch location={background || location}>
-      <Route path ="/plants" exact component ={PlantsPage}/>
-      <Route path ="/management" exact component ={ManagementPage}/>
-      <Route path ="/history" exact component ={HistoryPage}/>
+      <ProtectedRoute exact  path ="/plants" component ={PlantsPage}/>
+      <ProtectedRoute exact path ="/management" component ={ManagementPage}/>
+      <ProtectedRoute path ="/history" exact component ={HistoryPage}/>
       <Route path ="/login" exact component ={LoginPage}/>
       <Route path ="/" exact component ={MainPage}/>
+      <Redirect from="*" to="/" />
       </Switch>
 
-      {background && <Route path="/plants/add/" children={<AddDialog/>} />}
-      {background && <Route path="/plants/edit/:id" children={<EditDialog/>} />}
-      {background && <Route path="/plants/delete/:id" children={<DeleteDialog/>} />}
-      {background && <Route path="/management/patches/delete/:id" children={<EndDialog/>} />}
-      {background && <Route path="/management/patches/:patchid/plants/:plantid" children={<SelectDialog/>} />}
-      {background && <Route path="/management/patches/none" children={<NoneDialog/>} />}
- 
+      {background && <ProtectedRoute path="/plants/add/" children={<AddDialog/>} />}
+      {background && <ProtectedRoute path="/plants/edit/:id" children={<EditDialog/>} />}
+      {background && <ProtectedRoute path="/plants/delete/:id" children={<DeleteDialog/>} />}
+      {background && <ProtectedRoute path="/management/patches/delete/:id" children={<EndDialog/>} />}
+      {background && <ProtectedRoute path="/management/patches/:patchid/plants/:plantid" children={<SelectDialog/>} />}
+      {background && <ProtectedRoute path="/management/patches/none" children={<NoneDialog/>} />}
+      {background && <ProtectedRoute path="/login/failed" children={<NoneDialog/>} />}
     </div>
+  
   );
 }
 

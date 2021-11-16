@@ -7,7 +7,6 @@ export const authenticate=()=>{
     }
 }
 
-
 export const authSuccess= (content)=>{
     localStorage.setItem('USER_KEY',content.token);
     return {
