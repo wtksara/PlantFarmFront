@@ -1,5 +1,7 @@
-import {AUTH_REQ,AUTH_SUCCESS,AUTH_FAILURE} from './authTypes';
-
+import {AUTH_REQ,
+        AUTH_SUCCESS,
+        AUTH_FAILURE} 
+        from './authTypes';
 
 export const authenticate=()=>{
     return {
@@ -8,16 +10,16 @@ export const authenticate=()=>{
 }
 
 export const authSuccess= (content)=>{
-    localStorage.setItem('USER_KEY',content.token);
+    localStorage.setItem('USER_KEY', content.token);
     return {
-        type:AUTH_SUCCESS,
+        type: AUTH_SUCCESS,
         payload:content
     }
 }
 
 export const authFailure=(error)=>{
     return {
-        type:AUTH_FAILURE,
+        type: AUTH_FAILURE,
         payload:error
     }
 }

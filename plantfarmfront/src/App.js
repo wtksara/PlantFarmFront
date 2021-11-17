@@ -1,6 +1,5 @@
 
 import Box from '@mui/material/Box';
-
 import PlantsPage from './Components/Pages/PlantsPage';
 import ManagementPage from './Components/Pages/ManagementPage';
 import HistoryPage from './Components/Pages/HistoryPage';
@@ -14,23 +13,17 @@ import EndDialog from './Components/Dialogs/EndDialog'
 import NoneDialog from './Components/Dialogs/NoneDialog'
 import SelectDialog from './Components/Dialogs/SelectDialog'
 import ProtectedRoute from './ProtectedRoute'
-import history from './history';
 import{ BrowserRouter as Router,
         Switch,
         Route,
         useLocation,
         Redirect } from 'react-router-dom'; 
 
-
-
-
 function Paths() {
   let location = useLocation();
   let background = location.state && location.state.background;
 
-
   return (
-   
     <div>
       <Switch location={background || location}>
       <ProtectedRoute exact  path ="/plants" component ={PlantsPage}/>
@@ -49,6 +42,7 @@ function Paths() {
       {background && <ProtectedRoute path="/management/patches/none" children={<NoneDialog/>} />}
       {background && <ProtectedRoute path="/login/failed" children={<NoneDialog/>} />}
       {background && <ProtectedRoute path="/plants/add/failed" children={<NoneDialog/>} />}
+      {background && <ProtectedRoute path="/plants/delete/failed" children={<NoneDialog/>} />}
     </div>
   
   );

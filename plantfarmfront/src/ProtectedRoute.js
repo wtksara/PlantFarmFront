@@ -18,7 +18,7 @@ const ProtectedRoute = ({ component: Component, ...rest }) => {
     if (localStorage.getItem("USER_KEY")==null){
       history.push('/login');
       window.location.reload();
-       return false;
+      return false;
     }
     return true;
   }
@@ -26,10 +26,8 @@ const ProtectedRoute = ({ component: Component, ...rest }) => {
   return (
     <Fragment>
       <Route {...rest} render={props => {
-            if (checkValidToken()) {
-            return <Component {...props} />
-            }
-        }} />
+            if (checkValidToken()) { return <Component {...props} /> }
+      }} />
     </Fragment>
   );
 }

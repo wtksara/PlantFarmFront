@@ -19,8 +19,8 @@ export default function DialogPage(props)  {
     return (
         <div>
         <Dialog 
-            open = {true} 
-            onClose={back}>
+        open = {true} 
+        onClose={back}>
             <DialogTitle 
                 sx={{ alignItems: 'flex-end' , backgroundColor: "#A9C47F"}}>
                <div> 
@@ -29,9 +29,12 @@ export default function DialogPage(props)  {
                     component="div">
                     {props.title}
                    </Typography>
+                   <Typography 
+                    variant="h6" 
+                    component="div">
+                   </Typography>
                 </div>
             </DialogTitle>
-
             <DialogContent 
                 sx={{ backgroundColor: "#edeec9"}} 
                 dividers>
@@ -41,7 +44,6 @@ export default function DialogPage(props)  {
                 </DialogContentText>
                     {props.children}
             </DialogContent>
-
         </Dialog>
         </div>
     )

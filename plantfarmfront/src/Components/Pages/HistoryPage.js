@@ -8,7 +8,6 @@ import Topic from '../Topic';
 import Table from '../Table';
 import CultivationService from '../../Services/CultivationService';
 import history from '../../history';
-import Button from '@mui/material/Button';
 
 class HistoryPage extends React.Component {
 

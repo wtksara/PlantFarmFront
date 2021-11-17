@@ -19,8 +19,12 @@ class PlantService {
         return axios.get(PLANTS_API_BASE_URL + '/' + plantId);
     }
 
-    updatePlant(plant, plantId){
-        return axios.put(PLANTS_API_BASE_URL + '/' + plantId,  plant);
+    updatePlant(formData){
+        return axios.put(PLANTS_API_BASE_URL + '/update',  formData);
+    }
+
+    updatePlantAndImage(formData){
+        return axios.put(PLANTS_API_BASE_URL + '/update/all',  formData);
     }
 
     deletePlant(plantId){

@@ -2,13 +2,12 @@ import * as React from 'react';
 import { DialogActions, 
          Button } 
          from '@mui/material';
-
 import { withRouter, 
          useHistory} 
          from 'react-router-dom';
-
 import { useEffect,
          useState} from 'react';
+
 import DialogPage from './DialogPage';
 import PatchService from '../../Services/PatchService'
 
@@ -19,30 +18,22 @@ const initial = {
 
 const EndDialog = (props) => {
   const { id } = props.match.params;
-  const [ amount, setAmount]= useState(props.location.state.amountOfDays);
   const [ values, setValues] = useState(initial);
 
   let history = useHistory();
-  let timeOfGrowth = amount - values.amountOfDays;
+  let timeOfGrowth = props.location.state.amountOfDays - values.amountOfDays;
 
   function topicTitle(){
-  if (timeOfGrowth >0){
-    return "It has left " + timeOfGrowth +  " days to end cultivation" ;
-  }
-  else if (timeOfGrowth == 0) {
-    return "It is end of cultivation" ;
-  }
-  else {
-    return "Cultivation time has been extended by " + Math.abs(timeOfGrowth) + " days";
-  }
+    if (timeOfGrowth >0) return "It has left " + timeOfGrowth +  " days to end cultivation" ;
+    else if (timeOfGrowth == 0) return "It is end of cultivation" ;
+    else return "Cultivation time has been extended by " + Math.abs(timeOfGrowth) + " days";
   }
 
   useEffect(() => {
     PatchService.getPatchById(id).then((res) => {
         setValues(res.data);
-    }
-    )
-  }, []);
+    })}
+    , []);
 
 
   const handleEnd = x => {
@@ -52,9 +43,7 @@ const EndDialog = (props) => {
     })
   }
 
-
     return (
-     
       <React.Fragment>
       <DialogPage 
         title = "Are you sure you want to end cultivation ?" 

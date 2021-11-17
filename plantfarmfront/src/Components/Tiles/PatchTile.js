@@ -1,34 +1,34 @@
 import * as React from 'react';
-import Button from '@mui/material/Button';
-import Card from '@mui/material/Card'
-import CardContent from '@mui/material/CardContent';
-import CardHeader from '@mui/material/CardHeader';
-import CardMedia from '@mui/material/CardMedia';
-import Grid from '@mui/material/Grid';
-import CardActions from '@mui/material/CardActions';
-import Container from '@mui/material/Container';
-import Typography from '@mui/material/Typography';
-import Alert from '@mui/material/Alert';
-
-import Slider from '@mui/material/Slider';
+import { useEffect, useState} from 'react'
 import { withStyles } from '@mui/styles';
-import AppBar from '@mui/material/AppBar';
-import Toolbar from '@mui/material/Toolbar';
-import AcUnitIcon from '@mui/icons-material/AcUnit';
-import { Link } from "react-router-dom";
-import { useLocation } from "react-router-dom";
-import Image from "material-ui-image";
-import InputLabel from '@mui/material/InputLabel';
-import MenuItem from '@mui/material/MenuItem';
-import FormHelperText from '@mui/material/FormHelperText';
-import FormControl from '@mui/material/FormControl';
-import Select from '@mui/material/Select';
-import sun from './sun.jpg';
+import { Link, useLocation  } from "react-router-dom";
+import {Button,
+        Card,
+        CardContent,
+        CardHeader,
+        CardMedia,
+        CardActions,
+        Grid,
+        Container,
+        Typography,
+        Alert,
+        Slider,
+        AppBar,
+        Toolbar,
+        InputLabel,
+        MenuItem,
+        FormControl,
+        Select} 
+        from '@mui/material';
+
+// Images
+import Sun from '../../Images/sun.png';
+import SunWithCloud from '../../Images/sunWithCloud.png';
+import Cloud from '../../Images/cloud.png';
+import Moon from '../../Images/moon.png';
+
 import PlantService from '../../Services/PlantService'
 
-import { useEffect,
-         useState} from 'react'
-         
 const initial = [{
   id: 0,
   name: "",}
@@ -42,43 +42,12 @@ const PatchTile = (props) =>{
     const [patchTwo, setPatchTwo] = React.useState(0);
     const [patchThree, setPatchThree] = React.useState(0);
     
-
-
-    function handleChange(id, event) {
-        if (id == 1) return setPatchOne(event.target.value);
-        else if (id == 2) return setPatchTwo(event.target.value);
-        else if (id == 3)  return setPatchThree(event.target.value);
-    }
-
-    function whichPatch(id){
-      if (id == 1) return patchOne;
-      else if (id ==2)  return patchTwo; 
-      else if (id ==3) return  patchThree;   
-    }
-
-    
     useEffect(() => {
       PlantService.getPlants().then((res) => {
           setValues(res.data);
       }
       )
     }, []);
-
-    function setMarks(patch){
-      
-      var amount;
-      if (patch.actualAmountOfDays > patch.amountOfDays) { amount =patch.actualAmountOfDays;}
-      else {  amount = patch.amountOfDays }
-      var marks= [ 
-          { value: 0, label: "0",},
-          { value: parseInt(amount*0.25), label: (parseInt(amount*0.25)).toString(),},
-          { value: parseInt(amount*0.50), label: (parseInt(amount*0.50)).toString(),},
-          { value: parseInt(amount*0.75), label: (parseInt(amount*0.75)).toString(),},
-          { value: parseInt(amount), label: (parseInt(amount)).toString(),},
-        ]
-      return marks
-    }
-
 
     const CustomSlider = withStyles({
       thumb: { backgroundColor: "#A9C47F",},
@@ -101,38 +70,52 @@ const PatchTile = (props) =>{
     })(Slider);
 
 
+    function handleChange(id, event) {
+        if (id == 1) return setPatchOne(event.target.value);
+        else if (id == 2) return setPatchTwo(event.target.value);
+        else if (id == 3)  return setPatchThree(event.target.value);
+    }
+
+    function whichPatch(id){
+      if (id == 1) return patchOne;
+      else if (id ==2)  return patchTwo; 
+      else if (id ==3) return  patchThree;   
+    }
+
+    function setMarks(patch){
+      var amount;
+      if (patch.actualAmountOfDays > patch.amountOfDays) amount =patch.actualAmountOfDays;
+      else amount = patch.amountOfDays
+      var marks= [ 
+          { value: 0, label: "0",},
+          { value: parseInt(amount*0.25), label: (parseInt(amount*0.25)).toString(),},
+          { value: parseInt(amount*0.50), label: (parseInt(amount*0.50)).toString(),},
+          { value: parseInt(amount*0.75), label: (parseInt(amount*0.75)).toString(),},
+          { value: parseInt(amount), label: (parseInt(amount)).toString(),},
+      ]
+      return marks
+    }
+
     function alertColor(patch){
       var temperatureDifference = patch.actualTemperature - patch.temperature;
       var humidityDifference = patch.actualHumidity - patch.humidity;
   
       if (temperatureDifference > 10 ) {
-          if (humidityDifference > 10 )
-            return "#d00000" 
-          else if (humidityDifference >5)
-            return "#d00000" 
-          else 
-            return "#d00000"
+          if (humidityDifference > 10 ) return "#d00000" 
+          else if (humidityDifference >5) return "#d00000" 
+          else return "#d00000"
       }
       else if (temperatureDifference > 5) { 
-          if (humidityDifference > 10 )
-            return "#d00000" 
-          else if (humidityDifference >5)
-           return "#e85d04" 
-         else 
-           return  "#e85d04" 
+          if (humidityDifference > 10 ) return "#d00000" 
+          else if (humidityDifference >5) return "#e85d04" 
+          else return  "#e85d04" 
       }
-      else if (temperatureDifference < -5) { 
-         return  "#0096c7" 
-      }
+      else if (temperatureDifference < -5) return  "#0096c7" 
       else {
-        if (humidityDifference > 10 )
-          return  "#d00000" 
-        else if (humidityDifference > 5)
-          return  "#A9C47F" 
-        else if (humidityDifference < -5)
-          return  "#0096c7"
-        else
-          return  "#A9C47F" 
+        if (humidityDifference > 10 ) return  "#d00000" 
+        else if (humidityDifference > 5) return  "#A9C47F" 
+        else if (humidityDifference < -5) return  "#0096c7"
+        else return  "#A9C47F" 
       }
     }
 
@@ -184,147 +167,160 @@ const PatchTile = (props) =>{
         else
           return <Grid sx={{ pb:5}}/>;
       }
-
-
     }
-
-   
     
     return (
       <React.Fragment>
-      <Container maxWidth="md" component="main" sx={{ pt: 0, pb: 8 , backgroundColor: "#ffffff" }} >
-      <Grid container spacing={2} mt ={0.5} alignItems="flex-end"> 
+      <Container maxWidth="md" 
+        component="main" 
+        sx={{ pt: 0, pb: 8 , backgroundColor: "#ffffff" }} >
+      <Grid container 
+        spacing={2} 
+        mt ={0.5} 
+        alignItems="flex-end"> 
       {patches.map((patch, id) => (
-        <Grid item key={id}  xs={12} sm={6} md={4} >
-      {patch.plantName == null ? 
-      (
+        <Grid item key={id} 
+        xs={12} 
+        sm={6} 
+        md={4} >
+        {patch.plantName == null ? 
+        (
         <Card sx={{ borderLeft: 4, borderRight:4 ,borderTop: 4, borderBottom: 4, borderColor : "#b08968", borderStyle: 'solid'}}> 
-        <AppBar position="static" color="default" elevation={0} sx={{ borderBottom: '1px solid rgba(0, 0, 0, 0.12)' }} >
+        <AppBar position="static" 
+        color="default" elevation={0} 
+        sx={{ borderBottom: '1px solid rgba(0, 0, 0, 0.12)' }} >
         <Toolbar sx={{ backgroundColor: "#e6ccb2"}}>
-          <Grid container spacing={2} alignItems="center"  >
+          <Grid container spacing={2} 
+            alignItems="center"  >
             <Grid item xs ={12}  >
-               <CardHeader title={"Empty patch"} subheader={"Choose the plant"} titleTypographyProps={{ align: 'center' }} subheaderTypographyProps={{ align: 'center', }} />
+               <CardHeader title={"Empty patch"} 
+                      subheader={"Choose the plant"} 
+                      titleTypographyProps={{ align: 'center' }} 
+                      subheaderTypographyProps={{ align: 'center', }} />
            </Grid>
-           </Grid>
-         </Toolbar>
-         </AppBar>   
-         <CardContent sx={{ backgroundColor: "#ffffff", pt: 12.5}}>
-         <Grid container spacing={2} alignItems="center"  >
-         <Grid item xs ={12} >
-         {visibility ? 
-          ( 
-         <FormControl fullWidth>
-        <InputLabel>Plant</InputLabel>
-        <Select
-          label="Select"
-          onChange={(e) => handleChange(patch.patchId, e)}
-        >
-          {values.map((value) => (
-          <MenuItem value={value.id}>{value.name}</MenuItem>
+          </Grid>
+        </Toolbar>
+        </AppBar>   
+        <CardContent sx={{ backgroundColor: "#ffffff", pt: 12.5}}>
+        <Grid container spacing={2} 
+          alignItems="center"  >
+        <Grid item xs ={12} >
+        {visibility ? ( 
+          <FormControl fullWidth>
+          <InputLabel>Plant</InputLabel>
+          <Select
+            label="Select"
+            onChange={(e) => handleChange(patch.patchId, e)}>
+          {values.map((value, id) => (
+            <MenuItem key = {id} value={value.id}>{value.name}</MenuItem>
           ))}
-        </Select>
-        </FormControl>
-         ) 
-         :
-         (<Grid item xs ={12}  sx={{pt: 7.5}}/>) 
-         }  
+          </Select>
+          </FormControl>
+        ) : (
+          <Grid item xs ={12}  sx={{pt: 7.5}}/>) 
+        }  
         </Grid>
         </Grid>
         </CardContent>
         <CardActions sx={{ backgroundColor: "ffffff", pt: 12}}>
-          <Grid container spacing ={2} alignItems="flex-end">
+          <Grid container spacing ={2} 
+            alignItems="flex-end">
           <Grid item xs={4}/>
           <Grid item xs={8}>
           {visibility ? 
-          ( 
-          <Button 
-                variant="outlined" 
+          ( <Button variant="outlined" 
                 variant="contained" 
                 color = 'inherit' 
                 sx={{ backgroundColor: "#b08968"}} 
                 fullWidth  
                 size="medium" 
                 component={Link} 
-                to={{ pathname: whichPatch(patch.patchId) != 0 ? `/management/patches/${patch.patchId}/plants/${whichPatch(patch.patchId)}` : `/management/patches/none`,
-                 state: { background: location , title: "Plant has not been selected for that patch", topic: " You have to select plant to start cultivation"}}} >
+                to={{ 
+                pathname: whichPatch(patch.patchId) != 0 ?
+                 `/management/patches/${patch.patchId}/plants/${whichPatch(patch.patchId)}` : `/management/patches/none`,
+                state: { 
+                  background: location , 
+                  title: "Plant has not been selected for that patch", 
+                  topic: " You have to select plant to start cultivation"}}} >
                 Select type</Button> 
-          ) 
-          :
-          (<div/>) 
+          ) : (<div/>) 
           }  
-            </Grid>    
-            </Grid>
+          </Grid>    
+          </Grid>
         </CardActions>
         </Card>
-
-
-      ) 
-      :
-      (
+      ) : (
         <Card sx={{ borderLeft: 4, borderRight:4 ,borderTop: 4, borderBottom: 4, borderColor : alertColor(patch), borderStyle: 'solid'}}> 
-        <AppBar position="static" color="default" elevation={0} sx={{ borderBottom: '1px solid rgba(0, 0, 0, 0.12)' }} >
+        <AppBar position="static" 
+              color="default" 
+              elevation={0} 
+              sx={{ borderBottom: '1px solid rgba(0, 0, 0, 0.12)' }} >
         <Toolbar sx={{ backgroundColor: "#edeec9"}}>
           <Grid container spacing={2} alignItems="center">
             <Grid item xs ={12} >
-               <CardHeader title={patch.plantName} subheader={patch.plantType} titleTypographyProps={{ align: 'center' }} subheaderTypographyProps={{ align: 'center', }} />
+               <CardHeader title={patch.plantName} 
+                        subheader={patch.plantType} 
+                        titleTypographyProps={{ align: 'center' }} 
+                        subheaderTypographyProps={{ align: 'center', }} />
            </Grid>
-           </Grid>
-         </Toolbar>
-         </AppBar>
+          </Grid>
+        </Toolbar>
+        </AppBar>
         <CardContent sx={{ backgroundColor: "#ffffff"}}>
-            <Grid container spacing = {1} alignItems="flex-end">
+            <Grid container spacing = {1} 
+                  alignItems="flex-end">
               <Grid item xs={9}>
-                <Typography variant="h3" align="left" >{patch.actualTemperature}°C</Typography>
+                <Typography variant="h3" 
+                        align="left">{patch.actualTemperature}°C</Typography>
               </Grid>
               <Grid item xs={3}>
-              <CardMedia  image={sun} align="right" sx={{ Color: "#edeec9", backgroundColor: "#edeec9"}}   style={{ height:63 , width : 60,  display: 'flex', justifyContent: 'flex-end' }} />
+              <CardMedia image={SunWithCloud} 
+                      align="right" 
+                      sx={{ Color: "#edeec9", backgroundColor: "#edeec9"}}   
+                      style={{ height:60 , width : 60,  display: 'flex', justifyContent: 'flex-end' }} />
               </Grid>
               <Grid item>
-                <Typography variant="h6" align="left" > Humidity: {patch.actualHumidity} %</Typography>
+                <Typography variant="h6" align="left"> Humidity: {patch.actualHumidity} %</Typography>
               </Grid>
             </Grid>
-            <Grid container spacing ={2} sx={{ pb:5 }} alignItems="left">
-              <Grid item>
+            <Grid container spacing ={2} 
+                sx={{ pb:5 }} 
+                alignItems="left">
+            <Grid item>
             </Grid>
             </Grid>
             {patch.actualAmountOfDays > patch.amountOfDays  ? 
-            (<CustomSliderAbove
-            track="inverted"
-            disabled 
-            defaultValue={[patch.amountOfDays, patch.actualAmountOfDays]}
-            step={5}
-            marks={setMarks(patch)}
-            max={0}
-            max={ patch.actualAmountOfDays }
-            valueLabelDisplay="on"
-          />
-            ):
-            (<CustomSlider
-          
-              aria-label="Always visible"
-              disabled 
-              defaultValue={patch.actualAmountOfDays}
-              step={5}
-              marks={setMarks(patch)}
-              max={0}
-              max={patch.amountOfDays }
-              valueLabelDisplay="on"
-            />
-              )
-             
-            }
-           <Grid>
-            <Typography variant="subtitle1" align="center" > {patch.actualAmountOfDays > patch.amountOfDays ? "Time of growth extended" : "Time of growth"} </Typography>
+            (<CustomSliderAbove track="inverted"
+                        disabled 
+                        defaultValue={[patch.amountOfDays, patch.actualAmountOfDays]}
+                        step={5}
+                        marks={setMarks(patch)}
+                        max={0}
+                        max={ patch.actualAmountOfDays }
+                        valueLabelDisplay="on"/>
+            ):(
+              <CustomSlider aria-label="Always visible"
+                        disabled 
+                        defaultValue={patch.actualAmountOfDays}
+                        step={5}
+                        marks={setMarks(patch)}
+                        max={0}
+                        max={patch.amountOfDays }
+                        valueLabelDisplay="on" />
+            )}
+          <Grid>
+            <Typography variant="subtitle1" 
+                      align="center" > 
+            {patch.actualAmountOfDays > patch.amountOfDays ? "Time of growth extended" : "Time of growth"} </Typography>
           </Grid>
           </CardContent>
           <CardActions sx={{ backgroundColor: "ffffff"}}>
-          <Grid container spacing ={2} alignItems="flex-end">
+          <Grid container spacing ={2} 
+                alignItems="flex-end">
           <Grid item xs={3}/>
           <Grid item xs={9}>
-          {visibility ? 
-          ( 
-          <Button 
-                variant="outlined" 
+          {visibility ? ( 
+            <Button variant="outlined" 
                 variant="contained" 
                 color = 'inherit' 
                 sx={{ backgroundColor: "#adc178"}} 
@@ -334,24 +330,19 @@ const PatchTile = (props) =>{
                 key={patch.key} 
                 to={{ pathname: `/management/patches/delete/${patch.patchId}`,state: { background: location , amountOfDays : patch.amountOfDays}}}>
                 End cultivation</Button>  
-            ) 
-            :
-            (<div/>) 
-            }    
-            </Grid>    
-            </Grid>
-            </CardActions>
-            </Card>
-            
+          ) : (<div/>) 
+          }    
+          </Grid>    
+          </Grid>
+          </CardActions>
+          </Card>     
       )}
-
       <CheckAlert patch = {patch}/>
       </Grid>
       ))}
       </Grid>
       </Container>
       </React.Fragment>
-
     )
 }
 export default PatchTile;

@@ -1,4 +1,7 @@
-import {AUTH_REQ,AUTH_SUCCESS,AUTH_FAILURE} from '../authTypes';
+import {AUTH_REQ,
+        AUTH_SUCCESS,
+        AUTH_FAILURE} 
+        from '../authTypes';
 
 const initialState={
     user:{},
@@ -6,20 +9,19 @@ const initialState={
     loading:false
 };
 
-
 const auth=(state=initialState,action)=>{
-    console.log("Reducer auth");
+
     switch(action.type){
         case AUTH_REQ:
-            return {...state,error:'',loading:true};
+            return {...state,error:'', loading:true};
         
         case AUTH_SUCCESS:
             const data=action.payload;
-            return {...state,error:'',loading:false,user:data};
+            return {...state,error:'', loading:false, user:data};
 
         case AUTH_FAILURE:
             const error=action.payload;
-            return {...state,loading:false,error:error};
+            return {...state, loading:false, error:error};
 
         default:
             return state;

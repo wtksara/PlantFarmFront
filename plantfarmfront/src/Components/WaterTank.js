@@ -1,36 +1,30 @@
 import React from 'react'
-import Typography from '@mui/material/Typography';
-import Container from '@mui/material/Container';
-import Box from '@mui/material/Box';
-import Slider from '@mui/material/Slider';
 import { withStyles } from '@mui/styles';
-import Grid from '@mui/material/Grid';
+import {Button ,
+        Box,
+        Slider,
+        Grid }
+  from '@mui/material';
+
 import Topic from './Topic';
-import Button from '@mui/material/Button';
 
 export default function WaterTank(props) {
     
     const {tank, visibility} = props;
 
     const CustomSlider = withStyles({
-
-        thumb: { 
-                  width: "200px !important",
+        thumb: {  width: "200px !important",
                   heigh: "50px !important",
                   backgroundColor: "#42a5f5",},
-        active: { 
-                  width: "200px", 
+        active: { width: "200px", 
                   backgroundColor: "#42a5f5",},
-        track: { 
-                  width: "200px !important",
+        track: {  width: "200px !important",
                   border: "3px solid grey",
                   color: "#42a5f5"},
-        rail: { 
-                  width: "200px !important",
+        rail: {   width: "200px !important",
                   border: "3px solid black",
                   color: "#001d3d"}
       })(Slider);
-      
       
       const marks = [
           { value: 4, label: '0%', },
@@ -44,7 +38,7 @@ export default function WaterTank(props) {
            var value = tank.level;
            switch (value) {
              case 0:
-              return 0
+              return 0;
               break;
              case 1:
               return 25;
@@ -60,31 +54,32 @@ export default function WaterTank(props) {
               break;
             default:
               break;
-           }
-          }
+        }}
+
         return(
             <React.Fragment>
-            <Topic title ="Water tank" text="Check the condition of your plants in control panel. Based on the actual measurments and uncoming alerts decided if your plants need the water. " />
+            <Topic title ="Water tank" 
+                   text="Check the condition of your plants in control panel. Based on the actual measurments and uncoming alerts decided if your plants need the water. " />
             <Grid align="center">
               <Box sx={{ height: 300 , ml:5}}>
-                <CustomSlider
-                disabled
-                aria-label="Restricted values"
-                defaultValue={tankValue(tank)}
-                orientation="vertical"
-                step={25}
-                valueLabelDisplay="auto"
-                marks={marks}/>
+                <CustomSlider disabled
+                        aria-label="Restricted values"
+                        defaultValue={tankValue(tank)}
+                        orientation="vertical"
+                        step={25}
+                        valueLabelDisplay="auto"
+                        marks={marks}/>
               </Box>
             </Grid>
-            <Grid align="center" sx={{ pt: 3 }}>
+            <Grid align="center" 
+                  sx={{ pt: 3 }}>
             { visibility ? (
-                <Button variant="contained" color ='inherit' sx={{ backgroundColor: "#42a5f5"}}  size="medium">Water plants</Button>
-            ) :(
-                <div/>
-            ) }
-            
+                <Button variant="contained" 
+                        color ='inherit' 
+                        sx={{ backgroundColor: "#42a5f5"}}  
+                        size="medium">Water plants</Button>
+            ) : ( <div/>) }
             </Grid>
             </React.Fragment>
-        )
+  )
 }

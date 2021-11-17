@@ -8,7 +8,7 @@ export default function AddDialog() {
     return (
     <React.Fragment>
         <DialogPage 
-        title = "Add new plant">
+            title = "Add new plant">
         <PlantForm/>
         </DialogPage>
     </React.Fragment>
