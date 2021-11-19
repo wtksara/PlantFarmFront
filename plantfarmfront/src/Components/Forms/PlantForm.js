@@ -147,7 +147,7 @@ const initial = {
         })
         if (!isUploaded) setAlert("Image is required")
         else setAlert("")
-        return Object.values(formErrors).every(x => x == "")
+        return Object.values(formErrors).every(x => x === "")
     }
     
     const handleInputChange = x => {

@@ -31,6 +31,7 @@ function Paths() {
       <ProtectedRoute path ="/history" exact component ={HistoryPage}/>
       <Route path ="/login" exact component ={LoginPage}/>
       <Route path ="/" exact component ={MainPage}/>
+      <Route path='/freepik' component={() => { window.location.href = 'https://www.freepik.com'; return null;}}/>
       <Redirect from="*" to="/" />
       </Switch>
 
@@ -43,6 +44,8 @@ function Paths() {
       {background && <ProtectedRoute path="/login/failed" children={<NoneDialog/>} />}
       {background && <ProtectedRoute path="/plants/add/failed" children={<NoneDialog/>} />}
       {background && <ProtectedRoute path="/plants/delete/failed" children={<NoneDialog/>} />}
+
+
     </div>
   
   );

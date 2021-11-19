@@ -2,7 +2,8 @@ import React from 'react';
 import {GlobalStyles,
     CssBaseline,
     Container,
-    Link } 
+    Link,
+    } 
     from '@mui/material';
 
 import WaterTank from '../WaterTank';
@@ -44,9 +45,11 @@ class ManagementPage extends React.Component {
             visibility ={true}/>
         <Container maxWidth={false} 
             sx ={{ pb: 4, display:'flex', justifyContent:'center', alignItems:'center'}}  >
-            <Link style={{ color: '#000000'}} 
-            to="https://www.freepik.com"
-            title="Freepik"> Icons designed by macrovector / Freepik </Link> 
+            <div>Icons made by 
+            <Link style={{ color: '#000000' }} 
+            to="/freepik" 
+            title="Freepik"> macrovector, katemangostar and freepik</Link> / Freepik 
+            </div>
         </Container>
         <Container maxWidth={false} sx ={{ pb: 4, alignItems: 'flex-end', backgroundColor: "#edeec9"}} >
             <WaterTank tank = {this.state.tank} visibility ={true}/>

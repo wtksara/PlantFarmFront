@@ -29,7 +29,7 @@ const DeleteDialog = (props) => {
     PlantService.deletePlant(id).then(res => { 
         history.push('/plants');
         window.location.reload();
-    }) .catch((err)=>{
+    }).catch((err)=>{
 
       if(err && err.response){
     
@@ -38,6 +38,12 @@ const DeleteDialog = (props) => {
           setTitle("Plant deleting failed");
           setTopic("Plant is still planted on the patch. You have to finished cultivation and then delete plant.");
           setIsFailed(true);
+          break;
+        default: 
+          setTitle("Plant deleting failed");
+          setTopic("Something went wrong try again.");
+          setIsFailed(true);
+          break;
     }
     }});
   }

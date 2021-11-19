@@ -7,6 +7,10 @@ class PlantService {
         return axios.get(PLANTS_API_BASE_URL);
     }
 
+    getPlantsByType(type){
+        return axios.get(PLANTS_API_BASE_URL+ '/type/'+ type);
+    }
+
     getShowPlants(){
         return axios.get(PLANTS_API_BASE_URL+ '/show')
     }

@@ -25,7 +25,7 @@ const EndDialog = (props) => {
 
   function topicTitle(){
     if (timeOfGrowth >0) return "It has left " + timeOfGrowth +  " days to end cultivation" ;
-    else if (timeOfGrowth == 0) return "It is end of cultivation" ;
+    else if (timeOfGrowth === 0) return "It is end of cultivation" ;
     else return "Cultivation time has been extended by " + Math.abs(timeOfGrowth) + " days";
   }
 

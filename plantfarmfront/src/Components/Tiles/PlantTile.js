@@ -37,7 +37,7 @@ import {Button,
         <CardContent sx={{ backgroundColor: "#edeec9"}}>
           <Grid style={{display:'flex', justifyContent:'center', alignItems:'center'}} >
           {plant.id ? 
-            <img src = {path.concat(plant.id,"/download")}  
+            <img src = {path.concat(plant.id,"/download")} alt="plantImage"  
                  style={{ height: '180px' , width: '180px'}} />  
             : null}
           </Grid>
@@ -48,16 +48,14 @@ import {Button,
         <CardActions sx={{ backgroundColor: "#edeec9"}}>
         {visibility ? 
         ( <React.Fragment>
-          <Button variant="outlined" 
-                  variant="contained" 
+          <Button variant="contained" 
                   color = 'inherit' 
                   sx={{ backgroundColor: "#adc178"}} 
                   fullWidth  
                   size="medium"  
                   component={Link} 
                   to={{ pathname: `/plants/edit/${plant.id}`,state: { background: location }}}>Edit</Button>                 
-          <Button variant="outlined" 
-                  variant="contained" 
+          <Button variant="contained" 
                   color = 'inherit' 
                   sx={{ backgroundColor: "#F4B752"}} 
                   fullWidth  

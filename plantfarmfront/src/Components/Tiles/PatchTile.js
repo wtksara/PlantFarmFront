@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React from 'react'
 import { useEffect, useState} from 'react'
 import { withStyles } from '@mui/styles';
 import { Link, useLocation  } from "react-router-dom";
@@ -18,6 +18,7 @@ import {Button,
         InputLabel,
         MenuItem,
         FormControl,
+        ListSubheader,
         Select} 
         from '@mui/material';
 
@@ -26,8 +27,9 @@ import Sun from '../../Images/sun.png';
 import SunWithCloud from '../../Images/sunWithCloud.png';
 import Cloud from '../../Images/cloud.png';
 import Moon from '../../Images/moon.png';
-
+import Temperature from '../../Images/temperature.png';
 import PlantService from '../../Services/PlantService'
+
 
 const initial = [{
   id: 0,
@@ -37,14 +39,34 @@ const initial = [{
 const PatchTile = (props) =>{
     let location = useLocation();
     const {patches, visibility} = props;
-    const [values, setValues] = useState(initial);
+    const [herbs, setHerbs] = useState(initial);
+    const [flowers, setFlowers] = useState(initial);
+    const [vegetables, setVegetables] = useState(initial);
+    const [others, setOthers] = useState(initial);
+
     const [patchOne, setPatchOne] = React.useState(0);
     const [patchTwo, setPatchTwo] = React.useState(0);
     const [patchThree, setPatchThree] = React.useState(0);
-    
+    const path = 'http://localhost:8080/api/plants/';
+
+
+
     useEffect(() => {
-      PlantService.getPlants().then((res) => {
-          setValues(res.data);
+     
+      PlantService.getPlantsByType("Vegetable").then((res) => {
+        setVegetables(res.data);
+      }
+      )
+      PlantService.getPlantsByType("Herb").then((res) => {
+        setHerbs(res.data);
+      }
+      )
+      PlantService.getPlantsByType("Flower").then((res) => {
+        setFlowers(res.data);
+      }
+      )
+      PlantService.getPlantsByType("Other").then((res) => {
+        setOthers(res.data);
       }
       )
     }, []);
@@ -71,15 +93,15 @@ const PatchTile = (props) =>{
 
 
     function handleChange(id, event) {
-        if (id == 1) return setPatchOne(event.target.value);
-        else if (id == 2) return setPatchTwo(event.target.value);
-        else if (id == 3)  return setPatchThree(event.target.value);
+        if (id === 1) return setPatchOne(event.target.value);
+        else if (id === 2) return setPatchTwo(event.target.value);
+        else if (id === 3)  return setPatchThree(event.target.value);
     }
 
     function whichPatch(id){
-      if (id == 1) return patchOne;
-      else if (id ==2)  return patchTwo; 
-      else if (id ==3) return  patchThree;   
+      if (id === 1) return patchOne;
+      else if (id === 2)  return patchTwo; 
+      else if (id === 3) return  patchThree;   
     }
 
     function setMarks(patch){
@@ -97,6 +119,7 @@ const PatchTile = (props) =>{
     }
 
     function alertColor(patch){
+      if (patch.actualTemperature != null){
       var temperatureDifference = patch.actualTemperature - patch.temperature;
       var humidityDifference = patch.actualHumidity - patch.humidity;
   
@@ -118,30 +141,34 @@ const PatchTile = (props) =>{
         else return  "#A9C47F" 
       }
     }
+      else return  "#A9C47F" 
+    }
 
     function CreateAlert( props ) {
         return <Alert sx={{ borderLeft: 4, borderRight:4 , borderTop: 0 ,borderBottom: 4, borderColor : props.color, borderStyle: 'solid'}} severity = {props.type}> {props.text}</Alert>;  
     }
 
     function CheckAlert (props){
+      console.log(props.patch);
+      if (props.patch.actualTemperature != null){
       var temperatureDifference = props.patch.actualTemperature - props.patch.temperature;
       var humidityDifference = props.patch.actualHumidity - props.patch.humidity;
   
       if (temperatureDifference > 10 ) {
           if (humidityDifference > 10 )
-            return <CreateAlert color = "#d00000" type = "error"  text= "Temperature and humidity are definitely too high !"/>
+            return <CreateAlert color = "#d00000" type = "error"  text= "Temperature and humidity are too high !"/>
           else if (humidityDifference > 5)
-            return <CreateAlert color = "#d00000" type = "error"  text= "Temperature is too high ! Humidity is above the average. "/>
+            return <CreateAlert color = "#d00000" type = "error"  text= "Temperature is too high ! Humidity is above average."/>
           else if (humidityDifference > -5)
             return <CreateAlert color = "#d00000" type = "error"  text= "Temperature is too high ! Humidity is too low "/>
           else 
-            return <CreateAlert color = "#d00000" type = "error"  text= " Temperature is definitely too high !"/>
+            return <CreateAlert color = "#d00000" type = "error"  text= " Temperature is too high !"/>
       }
       else if (temperatureDifference > 5) { 
           if (humidityDifference > 10 )
             return <CreateAlert color = "#d00000" type = "error"  text= "Temperature is above average. Humidity is too high!"/>
           else if (humidityDifference > 5)
-           return <CreateAlert color = "#e85d04" type = "warning"  text= "Temperature and humidity are above the average."/>
+           return <CreateAlert color = "#e85d04" type = "warning"  text= "Temperature and humidity are above average."/>
           else if (humidityDifference < -5)
            return <CreateAlert color = "#e85d04" type = "warning"  text= "Temperature is above average. Humidity is too low "/>
          else 
@@ -149,9 +176,9 @@ const PatchTile = (props) =>{
       }
       else if (temperatureDifference < -5 ) {
         if (humidityDifference > 10 )
-          return <CreateAlert color = "#0096c7" type = "info"  text= "Temperature is too low. Humidity are definitely too high !"/>
+          return <CreateAlert color = "#0096c7" type = "info"  text= "Temperature is too low. Humidity are too high !"/>
         else if (humidityDifference > 5)
-          return <CreateAlert color = "#0096c7" type = "info"  text= "Temperature is too low ! Humidity is above the average. "/>
+          return <CreateAlert color = "#0096c7" type = "info"  text= "Temperature is too low ! Humidity is above average."/>
         else if (humidityDifference < -5)
           return <CreateAlert color = "#0096c7" type = "info"  text= "Temperature is too low. Humidity is too low "/>
         else 
@@ -167,6 +194,18 @@ const PatchTile = (props) =>{
         else
           return <Grid sx={{ pb:5}}/>;
       }
+    }
+    else return <Grid sx={{ pb:5}}/>;
+    }
+
+    function Weather(patch){
+     
+      if (patch.actualInsolation != null){
+        if (patch.actualInsolation > 75.00) return Sun
+        else if (patch.actualInsolation > 50.00) return SunWithCloud
+        else if (patch.actualInsolation > 0.00) return Cloud
+      }
+      else return Temperature
     }
     
     return (
@@ -193,15 +232,15 @@ const PatchTile = (props) =>{
           <Grid container spacing={2} 
             alignItems="center"  >
             <Grid item xs ={12}  >
-               <CardHeader title={"Empty patch"} 
+               <CardHeader title={"Empty patch" } 
                       subheader={"Choose the plant"} 
-                      titleTypographyProps={{ align: 'center' }} 
-                      subheaderTypographyProps={{ align: 'center', }} />
+                      titleTypographyProps={{ align: 'center' , pt: 0.5}} 
+                      subheaderTypographyProps={{ align: 'center', pb: 0.5 }} />
            </Grid>
           </Grid>
         </Toolbar>
         </AppBar>   
-        <CardContent sx={{ backgroundColor: "#ffffff", pt: 12.5}}>
+        <CardContent sx={{ backgroundColor: "#ffffff", pt: 12}}>
         <Grid container spacing={2} 
           alignItems="center"  >
         <Grid item xs ={12} >
@@ -211,9 +250,23 @@ const PatchTile = (props) =>{
           <Select
             label="Select"
             onChange={(e) => handleChange(patch.patchId, e)}>
-          {values.map((value, id) => (
+          <ListSubheader style={{fontWeight: "bold", color: "#000000"}} >Vegetables</ListSubheader>
+          {vegetables.map((value, id) => (
             <MenuItem key = {id} value={value.id}>{value.name}</MenuItem>
           ))}
+           <ListSubheader style={{fontWeight: "bold", color: "#000000"}}  >Herbs</ListSubheader>
+          {herbs.map((value, id) => (
+            <MenuItem key = {id} value={value.id}>{value.name}</MenuItem>
+          ))}
+           <ListSubheader style={{fontWeight: "bold", color: "#000000"}}  >Flowers</ListSubheader>
+          {flowers.map((value, id) => (
+            <MenuItem key = {id} value={value.id}>{value.name}</MenuItem>
+          ))}
+           <ListSubheader style={{fontWeight: "bold", color: "#000000"}} >Others</ListSubheader>
+          {others.map((value, id) => (
+            <MenuItem key = {id} value={value.id}>{value.name}</MenuItem>
+          ))}
+
           </Select>
           </FormControl>
         ) : (
@@ -228,15 +281,14 @@ const PatchTile = (props) =>{
           <Grid item xs={4}/>
           <Grid item xs={8}>
           {visibility ? 
-          ( <Button variant="outlined" 
-                variant="contained" 
+          ( <Button variant="contained" 
                 color = 'inherit' 
                 sx={{ backgroundColor: "#b08968"}} 
                 fullWidth  
                 size="medium" 
                 component={Link} 
                 to={{ 
-                pathname: whichPatch(patch.patchId) != 0 ?
+                pathname: whichPatch(patch.patchId) !== 0 ?
                  `/management/patches/${patch.patchId}/plants/${whichPatch(patch.patchId)}` : `/management/patches/none`,
                 state: { 
                   background: location , 
@@ -256,12 +308,22 @@ const PatchTile = (props) =>{
               elevation={0} 
               sx={{ borderBottom: '1px solid rgba(0, 0, 0, 0.12)' }} >
         <Toolbar sx={{ backgroundColor: "#edeec9"}}>
-          <Grid container spacing={2} alignItems="center">
+          <Grid container spacing={0} alignItems="center"> 
             <Grid item xs ={12} >
-               <CardHeader title={patch.plantName} 
-                        subheader={patch.plantType} 
-                        titleTypographyProps={{ align: 'center' }} 
-                        subheaderTypographyProps={{ align: 'center', }} />
+               <CardHeader title={
+                          <React.Fragment>
+                          <Grid container spacing={4} alignItems="flex-end">
+                          <Grid item xs={2}>
+                          <img src = {path.concat(patch.plantId,"/download")} alt="plantImage"  
+                          style={{ display:'flex', justifyContent:'center', alignItems:'center',  height: '65px' , width: '65px'}} />
+                          </Grid>
+                          < Grid item xs={10}>
+                          <Typography variant={"h5"} align='center' >{patch.plantName}</Typography>
+                          <Typography variant={"subtitle1"} align='center' >{patch.plantType}</Typography>
+                          </Grid>
+                          </Grid>
+                          </React.Fragment>
+              } /> 
            </Grid>
           </Grid>
         </Toolbar>
@@ -274,9 +336,8 @@ const PatchTile = (props) =>{
                         align="left">{patch.actualTemperature}°C</Typography>
               </Grid>
               <Grid item xs={3}>
-              <CardMedia image={SunWithCloud} 
-                      align="right" 
-                      sx={{ Color: "#edeec9", backgroundColor: "#edeec9"}}   
+              <CardMedia image={Weather(patch)} 
+                      align="right"   
                       style={{ height:60 , width : 60,  display: 'flex', justifyContent: 'flex-end' }} />
               </Grid>
               <Grid item>
@@ -295,7 +356,6 @@ const PatchTile = (props) =>{
                         defaultValue={[patch.amountOfDays, patch.actualAmountOfDays]}
                         step={5}
                         marks={setMarks(patch)}
-                        max={0}
                         max={ patch.actualAmountOfDays }
                         valueLabelDisplay="on"/>
             ):(
@@ -304,8 +364,7 @@ const PatchTile = (props) =>{
                         defaultValue={patch.actualAmountOfDays}
                         step={5}
                         marks={setMarks(patch)}
-                        max={0}
-                        max={patch.amountOfDays }
+                        max={patch.amountOfDays}
                         valueLabelDisplay="on" />
             )}
           <Grid>
@@ -320,8 +379,7 @@ const PatchTile = (props) =>{
           <Grid item xs={3}/>
           <Grid item xs={9}>
           {visibility ? ( 
-            <Button variant="outlined" 
-                variant="contained" 
+            <Button variant="contained" 
                 color = 'inherit' 
                 sx={{ backgroundColor: "#adc178"}} 
                 fullWidth  
