@@ -60,7 +60,6 @@ function Row(props) {
                   <TableCell align="left">Date</TableCell>
                   <TableCell align="right">Humidity [%]</TableCell>
                   <TableCell align="right">Temperature [°C]</TableCell>
-                  <TableCell align="right">Insolation [%]</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
@@ -69,7 +68,6 @@ function Row(props) {
                   <TableCell> {measurementRow.date}</TableCell>
                   <TableCell align="right">{measurementRow.humidity}</TableCell>
                   <TableCell align="right">{measurementRow.temperature}</TableCell>
-                  <TableCell align="right">{measurementRow.insolation}</TableCell>
               </TableRow>
             ))}
             </TableBody>

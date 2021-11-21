@@ -27,7 +27,7 @@ class ManagementPage extends React.Component {
     PatchService.getPatches().then((response) => {
         this.setState({patches: response.data});
     });
-    TankService.getTank().then((response) => {
+    TankService.getTank(1).then((response) => {
         this.setState({tank: response.data});
     });  
     }

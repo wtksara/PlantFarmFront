@@ -1,5 +1,7 @@
 import React from 'react'
 import { withStyles } from '@mui/styles';
+import { useLocation, useHistory} from "react-router-dom";
+import { useEffect, useState} from 'react'
 import {Button ,
         Box,
         Slider,
@@ -7,10 +9,20 @@ import {Button ,
   from '@mui/material';
 
 import Topic from './Topic';
+import TankService from '../Services/TankService'
 
 export default function WaterTank(props) {
     
-    const {tank, visibility} = props;
+    const {visibility} = props;
+    const [tank, setTank] = useState([]);
+    let location = useLocation();
+    let history = useHistory();
+
+    useEffect(() => {
+      TankService.getTank(1).then((response) => {
+        setTank(response.data)
+      })
+    }, []);
 
     const CustomSlider = withStyles({
         thumb: {  width: "200px !important",
@@ -28,33 +40,46 @@ export default function WaterTank(props) {
       
       const marks = [
           { value: 4, label: '0%', },
-          { value: 25, label: '25%', },
+          { value: 26, label: '25%', },
           { value: 50, label: '50%', },
           { value: 75, label: '75%', },
-          { value: 96, label: '100%',},
+          { value: 98, label: '100%',},
         ];
-      
-        function tankValue(tank){
-           var value = tank.level;
-           switch (value) {
-             case 0:
-              return 0;
-              break;
-             case 1:
-              return 25;
-              break;
-             case 2:
-              return 50;
-              break;
-             case 3:
-              return 75;
-              break;
-             case 4:
-              return 100;
-              break;
-            default:
-              break;
-        }}
+    
+      const handleWateringPlants = x => {
+        
+      TankService.getTank(1).then((response) => {
+          setTank(response.data);
+          if (response.data.level > 5){
+            TankService.watering().then(res => { 
+  
+            if(res.status===200){
+                history.push({ pathname:'/management/watering/success', 
+                state:  {background: location , 
+                title: "Watering succesful", 
+                topic: "Your plants has been watered."}});
+              }
+           
+            }).catch((err)=>{
+
+              if(err && err.response){
+                switch(err.response.status){
+                  default:
+                    history.push({ pathname:'/management/watering/failed', 
+                    state:  {background: location , 
+                    title: "Watering failed", 
+                    topic: "Level of water in the tank is to low to water plants. Please refill the tank."}});
+                }}}
+            )
+          }
+          else {
+              history.push({ pathname:'/management/watering/failed', 
+              state:  {background: location , 
+              title: "Watering failed", 
+              topic: "Level of water in the tank is to low to water plants. Please refill the tank."}});
+          }
+      });  
+      }
 
         return(
             <React.Fragment>
@@ -64,7 +89,7 @@ export default function WaterTank(props) {
               <Box sx={{ height: 300 , ml:5}}>
                 <CustomSlider disabled
                         aria-label="Restricted values"
-                        defaultValue={tankValue(tank)}
+                        defaultValue={tank.level}
                         orientation="vertical"
                         step={25}
                         valueLabelDisplay="auto"
@@ -77,6 +102,7 @@ export default function WaterTank(props) {
                 <Button variant="contained" 
                         color ='inherit' 
                         sx={{ backgroundColor: "#42a5f5"}}  
+                        onClick = {handleWateringPlants}
                         size="medium">Water plants</Button>
             ) : ( <div/>) }
             </Grid>

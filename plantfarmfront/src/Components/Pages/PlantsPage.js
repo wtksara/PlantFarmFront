@@ -87,8 +87,7 @@ const PlantsPage = (props) => {
 
     return(
       <React.Fragment>
-      <Topic 
-        title = "Collection of your plants" 
+      <Topic title = "Collection of your plants" 
         text = "Set the breeding requirements of your plants and adjust them to your garden on an ongoing basis."/>
       <Container disableGutters 
         maxWidth="md" 
@@ -107,24 +106,20 @@ const PlantsPage = (props) => {
               to={{ pathname: `/plants/add/`,state: { background: location } }}>
               <AddIcon/>Add new plant</Button> 
         </Grid>
-
         <Grid item xs={3}> 
         <FormControl className={classes.formControl}
                      size="small" >
-          <Select 
-                  className={classes.select}
+          <Select className={classes.select}
                   value={value}
                   sx={{ backgroundColor: "#F8D090"}}
                   onChange={(e) => handleChange(e)}>
           {types.map((type) => (
             <MenuItem key={type.id} value={type.id}>{type.name}</MenuItem>
           ))}
-          
           </Select>
           </FormControl></Grid>
           </Grid>
       </Container>
-      
       <PlantTile plants={plants} visibility = {true}/>
       <Container maxWidth={false} 
       sx ={{ pt: 4 , display:'flex', justifyContent:'center', alignItems:'center'}}  >

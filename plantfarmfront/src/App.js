@@ -44,8 +44,8 @@ function Paths() {
       {background && <ProtectedRoute path="/login/failed" children={<NoneDialog/>} />}
       {background && <ProtectedRoute path="/plants/add/failed" children={<NoneDialog/>} />}
       {background && <ProtectedRoute path="/plants/delete/failed" children={<NoneDialog/>} />}
-
-
+      {background && <ProtectedRoute path="/management/watering/failed" children={<NoneDialog/>} />}
+      {background && <ProtectedRoute path="/management/watering/success" children={<NoneDialog/>} />}
     </div>
   
   );
