@@ -29,7 +29,8 @@ import Cloud from '../../Images/cloud.png';
 import Moon from '../../Images/moon.png';
 import Temperature from '../../Images/temperature.png';
 import PlantService from '../../Services/PlantService'
-
+import PatchService from '../../Services/PatchService'
+import { ViewArray } from '@mui/icons-material';
 
 const initial = [{
   id: 0,
@@ -38,7 +39,11 @@ const initial = [{
 
 const PatchTile = (props) =>{
     let location = useLocation();
-    const {patches, visibility} = props;
+    const {visibility} = props;
+    const [patches, setPatches] = useState([]);
+    const [lastUpdate, setLastUpdate] = useState();
+    const [error, setError] = useState(false);
+
     const [herbs, setHerbs] = useState(initial);
     const [flowers, setFlowers] = useState(initial);
     const [vegetables, setVegetables] = useState(initial);
@@ -53,6 +58,39 @@ const PatchTile = (props) =>{
 
     useEffect(() => {
      
+      PatchService.getPatches().then((response) => {
+        setPatches(response.data);
+
+        response.data.map((patch) => {
+          if (patch.date !=null){
+            var now = new Date();
+            var lastMeasurement = new Date(patch.date)
+            var timeDifference = Math.abs(now.getTime() - lastMeasurement.getTime());
+            if (lastMeasurement.getHours() != 21 ){
+            if (timeDifference > 11700000) {// 3h and 15 min delay with measurement
+              setLastUpdate(lastMeasurement.toLocaleString() + " Error:  Problems with connection, recheck all sensors.");
+              setError(true);
+            }
+            else {
+              setLastUpdate(lastMeasurement.toLocaleString());
+              setError(false);
+            }
+            }
+            else{
+              if (timeDifference > 22500000) {// 6h and 15 min delay with measurement
+                setLastUpdate(lastMeasurement.toLocaleString() + " Error:  Problems with connection, recheck all sensors.");
+                setError(true);
+              }
+              else {
+                setLastUpdate(lastMeasurement.toLocaleString());
+                setError(false);
+              }
+            }
+        }})
+      });
+
+
+
       PlantService.getPlantsByType("Vegetable").then((res) => {
         setVegetables(res.data);
       }
@@ -213,6 +251,7 @@ const PatchTile = (props) =>{
       <Container maxWidth="md" 
         component="main" 
         sx={{ pt: 0, pb: 8 , backgroundColor: "#ffffff" }} >
+      <Typography  variant={"subtitle1"} align='center'color = {error ? "#d00000" : 'black'} >Last updated: {lastUpdate} </Typography>
       <Grid container 
         spacing={2} 
         mt ={0.5} 

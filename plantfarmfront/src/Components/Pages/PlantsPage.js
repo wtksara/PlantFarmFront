@@ -52,6 +52,7 @@ const PlantsPage = (props) => {
     useEffect(() => {
       PlantService.getPlants().then((response) => {
         setPlants(response.data);
+
     });
 
     }, []);

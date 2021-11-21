@@ -5,6 +5,7 @@ import { useEffect, useState} from 'react'
 import {Button ,
         Box,
         Slider,
+        Typography,
         Grid }
   from '@mui/material';
 
@@ -15,6 +16,7 @@ export default function WaterTank(props) {
     
     const {visibility} = props;
     const [tank, setTank] = useState([]);
+    const [textInfo, setTextInfo] = useState();
     let location = useLocation();
     let history = useHistory();
 
@@ -47,13 +49,17 @@ export default function WaterTank(props) {
         ];
     
       const handleWateringPlants = x => {
-        
+
       TankService.getTank(1).then((response) => {
-          setTank(response.data);
+        setTextInfo("Watering in progress. Waiting for answer from the water pump");
+        setTank(response.data);
+        
           if (response.data.level > 5){
+
             TankService.watering().then(res => { 
-  
+
             if(res.status===200){
+                setTextInfo("");
                 history.push({ pathname:'/management/watering/success', 
                 state:  {background: location , 
                 title: "Watering succesful", 
@@ -61,18 +67,19 @@ export default function WaterTank(props) {
               }
            
             }).catch((err)=>{
-
+              setTextInfo("");
               if(err && err.response){
                 switch(err.response.status){
                   default:
                     history.push({ pathname:'/management/watering/failed', 
                     state:  {background: location , 
                     title: "Watering failed", 
-                    topic: "Level of water in the tank is to low to water plants. Please refill the tank."}});
+                    topic: "You do not have a connection with a water pump. Recheck the connection."}});
                 }}}
             )
           }
           else {
+              setTextInfo("");
               history.push({ pathname:'/management/watering/failed', 
               state:  {background: location , 
               title: "Watering failed", 
@@ -105,6 +112,7 @@ export default function WaterTank(props) {
                         onClick = {handleWateringPlants}
                         size="medium">Water plants</Button>
             ) : ( <div/>) }
+            <Typography sx={{ pt: 2 }}>{textInfo}</Typography>
             </Grid>
             </React.Fragment>
   )
