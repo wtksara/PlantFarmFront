@@ -3,6 +3,7 @@ import {Container,
         Typography}
         from '@mui/material';
 
+// Komponent odpowiedzialny wyświetlenie tematu oraz tekstu
 export default function Topic(props) {
         return(
           <Container disableGutters 

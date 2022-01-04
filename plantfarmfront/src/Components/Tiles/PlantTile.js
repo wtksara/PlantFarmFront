@@ -13,9 +13,14 @@ import {Button,
         Typography}
   from '@mui/material';
 
+  // Komponent odpowiedzialny za wyświelenie roślin w postaci kafelków
   const PlantTile = (props) =>{
+
+    // Aktualny adres URL
     let location = useLocation();
+    // Zmienne pomocnicze
     const {plants, visibility} = props;
+    // Ściezka URL
     const path = 'http://localhost:8080/api/plants/';
 
     return (
@@ -29,6 +34,7 @@ import {Button,
                     sm={6} 
                     md={4} >
         <Card>
+         {/* Wyświetlenie w tytule nazwy rośliny oraz w podtytyle jej typu*/} 
         <CardHeader title={plant.name} 
                     subheader={plant.type} 
                     titleTypographyProps={{ align: 'center' }} 
@@ -36,11 +42,13 @@ import {Button,
                     sx={{ backgroundColor: "#A9C47F"}} />
         <CardContent sx={{ backgroundColor: "#edeec9"}}>
           <Grid style={{display:'flex', justifyContent:'center', alignItems:'center'}} >
+          {/* Wyświelenie grafiki rośliny lub pustego komponentu jeżeli nie ma grafiki */} 
           {plant.id ? 
             <img src = {path.concat(plant.id,"/download")} alt="plantImage"  
                  style={{ height: '180px' , width: '180px'}} />  
             : null}
           </Grid>
+          {/* Wyświetlenie informacji wzrostowych o roślinie */} 
           <Typography component="li" variant="subtitle1" align="center" > Humidity: {plant.humidity} %</Typography>
           <Typography component="li" variant="subtitle1" align="center" > Temperature: {plant.temperature}°C</Typography>
           <Typography component="li" variant="subtitle1" align="center" > Time of growth: {plant.amountOfDays} days</Typography>
@@ -48,6 +56,7 @@ import {Button,
         <CardActions sx={{ backgroundColor: "#edeec9"}}>
         {visibility ? 
         ( <React.Fragment>
+          {/* W zależności od operacji różny przycisk wyświetlany */} 
           <Button variant="contained" 
                   color = 'inherit' 
                   sx={{ backgroundColor: "#adc178"}} 
@@ -62,7 +71,7 @@ import {Button,
                   size="medium" 
                   component={Link} 
                   to={{ pathname: `/plants/delete/${plant.id}`,state: { background: location }}}>Delete</Button>
-                      </React.Fragment>
+          </React.Fragment>
         ) : ( <div/> )}
         </CardActions>
         </Card>

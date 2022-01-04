@@ -3,12 +3,14 @@ import {AUTH_REQ,
         AUTH_FAILURE} 
         from '../authTypes';
 
+// Inclalizacja stanu początkowego
 const initialState={
     user:{},
     error:'',
     loading:false
 };
 
+// W zależności od rezultatu uwierzytelnienia odpowiednia akcja
 const auth=(state=initialState,action)=>{
 
     switch(action.type){

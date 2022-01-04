@@ -19,22 +19,30 @@ import{ BrowserRouter as Router,
         useLocation,
         Redirect } from 'react-router-dom'; 
 
+// Funkcja odpowiedzialna za zmiany stron
 function Paths() {
+  // Aktualny adres URL
   let location = useLocation();
+  // Sposób wyświetlenia
   let background = location.state && location.state.background;
 
   return (
     <div>
+      {/* Renderowanie odpowiedniego komponentu w zależności od ścieżki url */}
       <Switch location={background || location}>
+      {/* Ściezki stron, które są dostepne jedynie po zalogowaniu */}
       <ProtectedRoute exact  path ="/plants" component ={PlantsPage}/>
       <ProtectedRoute exact path ="/management" component ={ManagementPage}/>
       <ProtectedRoute path ="/history" exact component ={HistoryPage}/>
+      {/* Ściezki stron, które są dostepne bez logowania */}
       <Route path ="/login" exact component ={LoginPage}/>
       <Route path ="/" exact component ={MainPage}/>
+      {/* Przekierowanie do strony z której wykorzystane zostały grafiki */}
       <Route path='/freepik' component={() => { window.location.href = 'https://www.freepik.com'; return null;}}/>
       <Redirect from="*" to="/" />
       </Switch>
 
+      {/* Okno dialogu wyświetlane na tle strony, dostepne jedynie po zalogowaniu */}
       {background && <ProtectedRoute path="/plants/add/" children={<AddDialog/>} />}
       {background && <ProtectedRoute path="/plants/edit/:id" children={<EditDialog/>} />}
       {background && <ProtectedRoute path="/plants/delete/:id" children={<DeleteDialog/>} />}
@@ -56,8 +64,10 @@ function App() {
   return (
     <Router>
       <Box>
+        {/* Pasek nawigacyjny wyświetlany jest na każdej stronie */}
         <NavigationBar/>
         <Switch>
+           {/* Zawartość strony się zmienia */}
           <Paths/>
         </Switch>
       </Box>

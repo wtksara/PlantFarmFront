@@ -10,26 +10,26 @@ import WaterTank from '../WaterTank';
 import Footer from '../Footer';
 import Topic from '../Topic';
 import PatchService from '../../Services/PatchService'
-import TankService from '../../Services/TankService'
 import PatchTile from '../Tiles/PatchTile';
 
+// Komponent wyświetlający strone do zarządzania uprawami na plantacjach
 class ManagementPage extends React.Component {
 
+    // Utworzenie zmiennych
     constructor(props){
       super(props)
       this.state = {
-          patches: [] ,
-          tank:[],
+          patches: []
       }
   }
- 
-  componentDidMount(){
+
+    // Metoda jest wykonywana poczas tworzenia się komponentu
+    componentDidMount(){
+    // Wywołanie żadania GET w celu uzyskania wszystkich plantacji
     PatchService.getPatches().then((response) => {
+        // Przypisanie danych do zmiennej patches
         this.setState({patches: response.data});
     });
-    TankService.getTank(1).then((response) => {
-        this.setState({tank: response.data});
-    });  
     }
     
   render() {
@@ -37,7 +37,6 @@ class ManagementPage extends React.Component {
         <React.Fragment>
         <GlobalStyles styles={{ ul: { margin: 0, padding: 0, listStyle: 'none' } }} />
         <CssBaseline />
-        <React.Fragment>
         <Topic 
             title = "Your cultivations" 
             text = "Manage your plant crops from the control panel. You can monitor the condition of your plants on an ongoing basis and water them remotely."/>
@@ -52,9 +51,8 @@ class ManagementPage extends React.Component {
             </div>
         </Container>
         <Container maxWidth={false} sx ={{ pb: 4, alignItems: 'flex-end', backgroundColor: "#edeec9"}} >
-            <WaterTank tank = {this.state.tank} visibility ={true}/>
+            <WaterTank visibility ={true}/>
         </Container>
-        </React.Fragment>
         <Footer/>
         </React.Fragment>
         )

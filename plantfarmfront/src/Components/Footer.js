@@ -4,6 +4,7 @@ import {Link,
         Typography}
         from '@mui/material';
 
+// Informacje na temat projektu 
 function Copyright(props) {
     return (
       <Typography variant="body2" 
@@ -17,7 +18,8 @@ function Copyright(props) {
       </Typography>
     );
   }
-  
+
+// Komponent odpowiedzialny za wyświelenie stopki strony
 class Footer extends React.Component{
     render(){
         return (

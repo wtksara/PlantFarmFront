@@ -21,30 +21,39 @@ import Footer from '../Footer';
 
 const theme = createTheme();
 
+// Komponent wyświetlający strone do logowania się
 const LoginPage=({loading,error,...props})=>{
 
+  // Aktualny adres URL
   let location = useLocation();
+  // Zmienna przechowująca dane użytkownika
   const [ values, setValues] = useState({
     username : '',
     password : ''
   });
 
+  // Metoda wywoływana po kliknieciu w przycisk 
   const handleSubmit = (event) => {
     event.preventDefault();
-   
     props.authenticate();
-    
+  
+    // Wywołanie żadania POST 
     LoginService.loginIn(values).then((response)=>{
 
+      // Uwierzytelnienie użytkownika zakończyło się sukcesem
       if(response.status===200){
+            // Przypisanie tokenu
             props.setUser(response.data);
+            // Przejście do strony głównej
             props.history.push('/');
             window.location.reload();
       }
-    }).catch((err)=>{
+      // Uwierzytelnienie nie powiodło się
+      }).catch((err)=>{
 
       if(err && err.response){
         switch(err.response.status){
+          // Niepoprawne dane użytkownika
           case 401:
                 props.history.push({ pathname:'/login/failed', 
                 state:  {background: location , 
@@ -54,6 +63,7 @@ const LoginPage=({loading,error,...props})=>{
                 props.loginFailure("Authentication Failed.Bad Credentials");
                 break;
           default:
+          // Bląd logowania
               props.history.push({ pathname:'/login/failed', 
               state:  {background: location , 
                 title: "Error", 
@@ -61,6 +71,7 @@ const LoginPage=({loading,error,...props})=>{
                 props.loginFailure('Something Wrong!Please Try Again'); 
         }}
       else{
+        // Bląd logowania
             props.history.push({ pathname:'/login/failed', 
               state:  {background: location , 
                 title: "Error", 
@@ -70,8 +81,10 @@ const LoginPage=({loading,error,...props})=>{
       }});
   };
 
+  // Metoda wywoływana w przypadku zmiany wartości pól
   const handleChange = (e) => {
     e.persist();
+    // Zapisanie wartości do zmiennej 
     setValues(values => ({
     ...values,
     [e.target.name]: e.target.value
@@ -96,6 +109,7 @@ const LoginPage=({loading,error,...props})=>{
             id="email"
             label="Username"
             value={values.username} 
+            // Obsługa zmiany wartości pola username
             onChange={handleChange} 
             name="username"
             autoComplete="username"
@@ -104,6 +118,7 @@ const LoginPage=({loading,error,...props})=>{
             required
             fullWidth
             value={values.password} 
+            // Obsługa zmiany wartości pola password
             onChange={handleChange} 
             name="password"
             label="Password"
@@ -123,7 +138,6 @@ const LoginPage=({loading,error,...props})=>{
     </ThemeProvider>
   );
 }
-
 const mapStateToProps=({auth})=>{
   return {
       loading:auth.loading,

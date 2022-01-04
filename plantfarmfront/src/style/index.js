@@ -1,5 +1,6 @@
 import styled from 'styled-components'
 
+// Styling box for uploading the image
 export const BoxUpload = styled.div`
     display: grid;
     margin-top: 0px;
@@ -27,6 +28,7 @@ export const BoxUpload = styled.div`
     }
 `
 
+// Styling image preview
 export const ImagePreview = styled.div`
     position: relative;
     /* cursor: pointer; */

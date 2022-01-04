@@ -9,12 +9,19 @@ import {withRouter,
 import DialogPage from './DialogPage';
 import PatchService from '../../Services/PatchService'
 
+// Komponent wykorzystujący DialogPage do wyświetlanie dialogu wyboru uprawy rośliny
 const SelectDialog = (props) => {
+
+  // Przekazanie do komponentu id plantacji oraz id rośliny
   const { patchid, plantid } = props.match.params;
+  // Dostęp do histori w celu nawigacji
   let history = useHistory();
 
+  // Metoda wywoływana po kliknieciu w przycisk
   const handleSelect = x => {
+        // Wywołanie żadania PUT w celu aktualizacji 
         PatchService.updatePatch(patchid, plantid).then(res => { 
+          // W przypadku powodzenia operacji przekierowanie z powrotem do zakładki zarządzanie
             history.push('/management');
             window.location.reload();
         })
