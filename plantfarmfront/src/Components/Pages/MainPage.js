@@ -1,7 +1,5 @@
 import * as React from 'react';
-import {CssBaseline, 
-    GlobalStyles,
-    Divider,
+import { Divider,
     Container} 
     from '@mui/material';
 
@@ -49,8 +47,6 @@ class MainPage extends React.Component{
     render(){
         return(
             <React.Fragment>
-            <GlobalStyles styles={{ ul: { margin: 0, padding: 0, listStyle: 'none' } }} />
-            <CssBaseline />
             <Topic 
                 title ="Plants" 
                 text="Create you own plant collection. Set the breeding requirements of your plants and adjust them to your garden on an ongoing basis." />

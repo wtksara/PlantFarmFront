@@ -1,7 +1,4 @@
 import * as React from 'react';
-import { CssBaseline,
-         GlobalStyles }
-         from '@mui/material';
 
 import Footer from '../Footer';
 import Topic from '../Topic';
@@ -32,8 +29,6 @@ class HistoryPage extends React.Component {
   render() {
     return (
     <React.Fragment>
-    <GlobalStyles styles={{ ul: { margin: 0, padding: 0, listStyle: 'none' } }} />
-    <CssBaseline/>
     <React.Fragment>
     <Topic 
       title = "History" 

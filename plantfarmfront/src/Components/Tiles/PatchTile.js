@@ -26,11 +26,9 @@ import {Button,
 import Sun from '../../Images/sun.png';
 import SunWithCloud from '../../Images/sunWithCloud.png';
 import Cloud from '../../Images/cloud.png';
-import Moon from '../../Images/moon.png';
-import Temperature from '../../Images/temperature.png';
 import PlantService from '../../Services/PlantService'
 import PatchService from '../../Services/PatchService'
-import { ViewArray } from '@mui/icons-material';
+import TankService from '../../Services/TankService'
 
 // Zmienna inicjująca stan poczatkowy 
 const initial = [{
@@ -53,6 +51,7 @@ const PatchTile = (props) =>{
     const [flowers, setFlowers] = useState(initial);
     const [vegetables, setVegetables] = useState(initial);
     const [others, setOthers] = useState(initial);
+    const [insolation, setInsolation] = useState(0);
     const [patchOne, setPatchOne] = React.useState(0);
     const [patchTwo, setPatchTwo] = React.useState(0);
     const [patchThree, setPatchThree] = React.useState(0);
@@ -99,20 +98,20 @@ const PatchTile = (props) =>{
       // Wywołanie żadań GET w celu uzyskania roślin o danych typach
       PlantService.getPlantsByType("Vegetable").then((res) => {
         setVegetables(res.data);
-      }
-      )
+      })
       PlantService.getPlantsByType("Herb").then((res) => {
         setHerbs(res.data);
-      }
-      )
+      })
       PlantService.getPlantsByType("Flower").then((res) => {
         setFlowers(res.data);
-      }
-      )
+      })
       PlantService.getPlantsByType("Other").then((res) => {
         setOthers(res.data);
-      }
-      )
+      })
+      TankService.getTank(1).then((response) => {
+          setInsolation(response.data)
+      })
+  
     }, []);
 
     
@@ -265,11 +264,11 @@ const PatchTile = (props) =>{
     }
 
     // Wyświetlanie odpowiedniej grafiki o pogodzie w zależności od poziomu nasłonecznienia
-    function Weather(patch){
-      if (patch.actualInsolation != null){
-        if (patch.actualInsolation > 75.00) return Sun
-        else if (patch.actualInsolation > 50.00) return SunWithCloud
-        else if (patch.actualInsolation > 0.00) return Cloud
+    function Weather(insolation){
+      if (insolation.insolation!= null){
+        if (insolation.insolation > 75.00) return Sun
+        else if (insolation.insolation > 50.00) return SunWithCloud
+        else if (insolation.insolation >= 0.00) return Cloud
       }
       else return Sun
     }
@@ -409,7 +408,7 @@ const PatchTile = (props) =>{
               </Grid>
               <Grid item xs={3}>
               {/* Wyświetlenie grafiki informujacej o pogodzie na plantacji */}
-              <CardMedia image={Weather(patch)} 
+              <CardMedia image={Weather(insolation)} 
                       align="right"   
                       style={{ height:60 , width : 60,  display: 'flex', justifyContent: 'flex-end' }} />
               </Grid>

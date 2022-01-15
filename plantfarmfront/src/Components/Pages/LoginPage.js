@@ -10,7 +10,6 @@ import {Box,
         Button,
         Avatar,
         TextField,
-        CssBaseline,
         Typography,
         Container} 
         from '@mui/material';
@@ -95,7 +94,6 @@ const LoginPage=({loading,error,...props})=>{
     <ThemeProvider theme={theme}>
       <Container component="main" 
         maxWidth="xs">
-      <CssBaseline/>
       <Box sx={{ marginTop: 8, display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
       <Avatar sx={{ m: 1, backgroundColor: "#A9C47F" }}/>
       <Typography component="h1" 

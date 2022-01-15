@@ -1,7 +1,5 @@
 import React from 'react';
-import {GlobalStyles,
-    CssBaseline,
-    Container,
+import {Container,
     Link,
     } 
     from '@mui/material';
@@ -35,8 +33,6 @@ class ManagementPage extends React.Component {
   render() {
     return(
         <React.Fragment>
-        <GlobalStyles styles={{ ul: { margin: 0, padding: 0, listStyle: 'none' } }} />
-        <CssBaseline />
         <Topic 
             title = "Your cultivations" 
             text = "Manage your plant crops from the control panel. You can monitor the condition of your plants on an ongoing basis and water them remotely."/>
