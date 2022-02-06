@@ -11,7 +11,7 @@ A guest, and more specifically a user who is not logged in, has limited options 
 When the application is launched, the home page is launched, which consists of four sections, respectively, plants, history, management and water tank.
 
 ###### "Login" tab
-
+<img src="/cultivation.png" width="384" height="275">
 
 ##### Admin interface
 
@@ -45,6 +45,8 @@ Starting a new crop is done by selecting a given plant from the list.
 An attempt to terminate a given crop is signaled with an additional confirmation message, which contains information about how long is left until the end of the cultivation or how many days the cultivation has been extended.
 
 ###### Water tank
-
+<img src="/cultivation.png" width="384" height="275">
 
 ###### "History" tab
+
+<img src="/cultivation.png" width="384" height="275">
